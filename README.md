@@ -1,1 +1,1 @@
-# car-wash-backend
+# car_wash_backend
