@@ -46,6 +46,11 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_filters',
     'drf_spectacular',
+    'users',
+    'carwash',
+    'schedule',
+    'services',
+    'contacts',
 ]
 
 MIDDLEWARE = [
