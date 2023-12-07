@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from carwash.models import CarWashTypeModel, CarWashModel
+from carwash.models import CarWashModel, CarWashTypeModel
 
 
 @admin.register(CarWashTypeModel)
