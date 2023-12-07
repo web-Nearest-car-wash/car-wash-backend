@@ -2,6 +2,7 @@ from django.db import models
 
 from .models import CarWash
 
+
 class Contacts(models.Model):
     """Класс, представляющий модель контактов автомойки."""
 

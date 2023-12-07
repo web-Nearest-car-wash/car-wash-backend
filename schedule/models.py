@@ -3,6 +3,7 @@ from django.utils.translation import gettext_lazy as _
 
 from .models import CarWash
 
+
 class Schedule(models.Model):
     """Класс, представляющий модель режима работы автомойки."""
 
