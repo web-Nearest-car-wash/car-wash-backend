@@ -1,8 +1,7 @@
 from django.contrib.auth.models import AbstractUser
-from django.core.validators import RegexValidator
 from django.db import models
-
 from phonenumber_field.modelfields import PhoneNumberField
+
 
 class User(AbstractUser):
     USER = 'user'
@@ -25,10 +24,6 @@ class User(AbstractUser):
         blank=True,
         null=True,
         unique=True,
-        # validators=RegexValidator(
-        #     r'^\+?\d{11}$',
-        #     message='Номер телефона должен быть в формате +79999999999'
-        # )
     )
 
     class Meta:
@@ -38,9 +33,6 @@ class User(AbstractUser):
 
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
-
-
-from django.db import models
 
 
 class Car(models.Model):
