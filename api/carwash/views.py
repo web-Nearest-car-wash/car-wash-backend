@@ -5,7 +5,6 @@ from carwash.models import CarWash
 from carwash.serializers import CarWashSerializer
 
 
-
 class CarWashViewSet(ReadOnlyModelViewSet):
     queryset = CarWash.objects.all()
     serializer_class = CarWashSerializer
