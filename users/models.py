@@ -38,8 +38,9 @@ class User(AbstractUser):
 class Car(models.Model):
     class CarType(models.TextChoices):
         CAR = 'car', 'Легковой автомобиль'
-        CVC = 'cvc', 'Внедорожник'
-        TRUCK = 'truck', 'Грузовой автомобиль'
+        SUV = 'suv', 'Внедорожник'
+        CROSSOVER = 'crossover', 'Кроссовер'
+        OVERS = 'overs', 'другое'
 
     brand = models.CharField(
         'Марка автомобиля',
@@ -62,3 +63,10 @@ class Car(models.Model):
         null=True,
         blank=True,
     )
+
+    class Meta:
+        verbose_name = 'Автомобиль'
+        verbose_name_plural = 'Автомобили'
+
+    def __str__(self):
+        return f'{self.brand} {self.model}'
