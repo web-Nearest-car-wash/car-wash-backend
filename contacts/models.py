@@ -1,13 +1,13 @@
 from django.db import models
 
-from .models import CarWash
+from carwash.models import CarWashModel
 
 
 class Contacts(models.Model):
     """Класс, представляющий модель контактов автомойки."""
 
     carwash = models.ForeignKey(
-        CarWash,
+        CarWashModel,
         on_delete=models.CASCADE,
         related_name='contacts',
         verbose_name='Мойка',

@@ -3,7 +3,7 @@ from django.core.validators import RegexValidator
 
 
 class CarWashTypeModel(models.Model):
-    name = models.CharField("Тип автомойки", required=True, null=False,
+    name = models.CharField("Тип автомойки", blank=True, null=False,
                             max_length=200)
 
     class Meta:
@@ -15,11 +15,12 @@ class CarWashTypeModel(models.Model):
 
 
 class CarWashModel(models.Model):
-    name = models.CharField("Название", null=False, required=True,
+    name = models.CharField("Название", null=False, blank=True,
                             max_length=200)
     coordinates = models.CharField(
         "Координаты Ш,Д",
-        required=True,
+        blank=True,
+        max_length=200,
         validators=[
             RegexValidator(
                 regex=("^-?([0-8]?[0-9]|90)(\.[0-9]{1,10}),"
