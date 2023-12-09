@@ -14,8 +14,8 @@ urlpatterns = [
         url_name='schema'), name='swagger-ui'),
     path('api/schema/redoc/', SpectacularRedocView.as_view(
         url_name='schema'), name='redoc'),
-    path('api/users/', include('users.urls')),
-    path('api/carwash/', include('carwash.urls')),
+    path('api/', include('api.users.urls')),
+    path('api/carwash/', include('api.carwash.urls')),
 ]
 
 if settings.DEBUG:
