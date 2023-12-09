@@ -166,13 +166,13 @@ SIMPLE_JWT = {
 }
 
 DJOSER = {
-    "LOGIN_FIELD": 'email',
-    "SEND_ACTIVATION_EMAIL": False,
+    'LOGIN_FIELD': 'username',
+    'SEND_ACTIVATION_EMAIL': False,
     'HIDE_USERS': False,
-    "SERIALIZERS": {
-        "user_create": "api.users.serializers.CustomUserCreateSerializer",
-        "user": "api.users.serializers.CustomUserSerializer",
-        "current_user": "api.users.serializers.CustomUserSerializer",
+    'SERIALIZERS': {
+        'user_create': 'api.users.serializers.CustomUserCreateSerializer',
+        'user': 'api.users.serializers.CustomUserSerializer',
+        'current_user': 'api.users.serializers.CustomUserSerializer',
     },
     'PERMISSIONS': {
         'user': ['djoser.permissions.CurrentUserOrAdmin'],
@@ -185,10 +185,10 @@ SPECTACULAR_SETTINGS = {
     'DESCRIPTION': 'Car_wash_API Schema',
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
-    "SWAGGER_UI_SETTINGS": {
+    'SWAGGER_UI_SETTINGS': {
             "filter": True,  # включить поиск по тегам
         },
-    "COMPONENT_SPLIT_REQUEST": True
+    'COMPONENT_SPLIT_REQUEST': True
 }
 
 AUTH_USER_MODEL = 'users.User'

@@ -4,6 +4,9 @@ from phonenumber_field.modelfields import PhoneNumberField
 
 
 class User(AbstractUser):
+    """
+    Модель пользователя
+    """
     USER = 'user'
     ADMIN = 'admin'
     MODERATOR = 'moderator'
