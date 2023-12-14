@@ -16,5 +16,4 @@ class CarWashViewSet(ReadOnlyModelViewSet):
     def get_serializer_class(self):
         if self.action == 'list':
             return CarWashSerializer
-        else:
-            return CarWashCardSerializer
+        return CarWashCardSerializer
