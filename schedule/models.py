@@ -3,7 +3,6 @@ from django.utils.translation import gettext_lazy as _
 
 from carwash.models import CarWash
 
-
 DAYS_OF_WEEK = [
     (1, _('Monday')),
     (2, _('Tuesday')),
@@ -13,6 +12,7 @@ DAYS_OF_WEEK = [
     (6, _('Saturday')),
     (7, _('Sunday')),
 ]
+
 
 class Schedule(models.Model):
     """Класс, представляющий модель режима работы автомойки."""
