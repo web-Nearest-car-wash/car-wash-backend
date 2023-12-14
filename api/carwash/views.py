@@ -1,11 +1,14 @@
+from drf_spectacular.utils import extend_schema_view
 from rest_framework.permissions import AllowAny
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
 from carwash.models import CarWashModel
-from carwash.serializers import CarWashSerializer
+from core.constants import CARWASH_API_SCHEMA_EXTENSIONS
+from .serializers import CarWashSerializer
 
 
+@extend_schema_view(**CARWASH_API_SCHEMA_EXTENSIONS)
 class CarWashViewSet(ReadOnlyModelViewSet):
-    queryset = CarWash.objects.all()
+    queryset = CarWashModel.objects.all()
     serializer_class = CarWashSerializer
     permission_classes = [AllowAny]
