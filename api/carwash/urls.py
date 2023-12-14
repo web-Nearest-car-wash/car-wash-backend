@@ -5,10 +5,10 @@ from .views import CarWashViewSet
 
 app_name = 'api'
 
-v1_router = SimpleRouter()
+router = SimpleRouter()
 
-v1_router.register(r'carwashes', CarWashViewSet, basename='carwashes')
+router.register(r'carwashes', CarWashViewSet, basename='carwashes')
 
 urlpatterns = [
-    path('', include(v1_router.urls)),
+    path('', include(router.urls)),
 ]
