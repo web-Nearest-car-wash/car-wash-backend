@@ -3,7 +3,6 @@ from rest_framework.routers import SimpleRouter
 
 from .views import CarWashViewSet
 
-app_name = 'api'
 
 router = SimpleRouter()
 
