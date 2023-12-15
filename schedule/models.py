@@ -1,24 +1,23 @@
 from django.db import models
-from django.utils.translation import gettext_lazy as _
 
-from carwash.models import CarWash
+from carwash.models import CarWashModel
 
 DAYS_OF_WEEK = [
-    (1, _('Monday')),
-    (2, _('Tuesday')),
-    (3, _('Wednesday')),
-    (4, _('Thursday')),
-    (5, _('Friday')),
-    (6, _('Saturday')),
-    (7, _('Sunday')),
+    (1, 'Понедельник'),
+    (2, 'Вторник'),
+    (3, 'Среда'),
+    (4, 'Четверг'),
+    (5, 'Пятница'),
+    (6, 'Суббота'),
+    (7, 'Воскресенье'),
 ]
 
 
-class Schedule(models.Model):
-    """Класс, представляющий модель режима работы автомойки."""
+class ScheduleModel(models.Model):
+    """Класс режима работы автомойки."""
 
     carwash = models.ForeignKey(
-        CarWash,
+        CarWashModel,
         on_delete=models.CASCADE,
         related_name='schedules',
         verbose_name='Мойка',
