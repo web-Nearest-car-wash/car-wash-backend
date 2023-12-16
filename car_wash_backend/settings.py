@@ -48,9 +48,10 @@ INSTALLED_APPS = [
     'drf_spectacular',
     'users',
     'carwash',
+    'contacts',
+    'promotions',
     'schedule',
     'services',
-    'contacts',
 ]
 
 MIDDLEWARE = [
