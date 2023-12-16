@@ -10,4 +10,4 @@ class CarWashTypeModelAdmin(admin.ModelAdmin):
 
 @admin.register(CarWashModel)
 class CarWashModelAdmin(admin.ModelAdmin):
-    list_display = ["id", "name", "coordinates", "type"]
+    list_display = ["id", "name", "type"]
