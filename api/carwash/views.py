@@ -15,15 +15,32 @@ from .serializers import CarWashSerializer, CarWashCardSerializer
 
 @extend_schema_view(**CARWASH_API_SCHEMA_EXTENSIONS)
 class CarWashViewSet(ReadOnlyModelViewSet):
+    """
+    Вьюсет предоставляет доступ к данным автомоек.
+
+    Разрешены GET-запросы для получения списка автомоек
+    и деталей конкретной автомойки.
+    Доступно для любого пользователя.
+
+    Эндпоинты:
+    - /carwashes/ : GET-запрос возвращает список всех автомоек.
+    - /carwashes/{id}/ : GET-запрос возвращает детали автомойки по ее id.
+
+    Если в GET-запросе передана геопозиция пользователя (latitude, longitude):
+    - /carwashes/?latitude={latitude}&longitude={longitude} :
+    возвращает список автомоек в заданной области,
+    определяемой параметрами LAT_RANGE и LONG_RANGE
+    в зависимости от геопозиции.
+    """
+
     queryset = CarWashModel.objects.all()
     serializer_class = CarWashSerializer
     permission_classes = [AllowAny]
     http_method_names = ['get']
 
     def list(self, request):
-        """Выводит список моек в заданной области
-        в зависимости от геопозиции.
-        Если геопозиция не передана в query_params,
+        """Выводит список моек в заданной области.
+        Если геопозиция пользователя не передана,
         выводит все мойки."""
         latitude_str = request.query_params.get('latitude')
         longitude_str = request.query_params.get('longitude')
@@ -45,6 +62,8 @@ class CarWashViewSet(ReadOnlyModelViewSet):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def get_serializer_class(self):
+        """Возвращает соответствующий класс сериализатора
+        зависимости от действия."""
         if self.action == 'list':
             return CarWashSerializer
         return CarWashCardSerializer
