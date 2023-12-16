@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import os
+from datetime import timedelta
 from distutils.util import strtobool
 from pathlib import Path
 
@@ -44,8 +45,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'djoser',
     'django_filters',
     'drf_spectacular',
+    'phonenumber_field',
     'users',
     'carwash',
     'contacts',
@@ -140,9 +143,42 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
-    'DEFAULT_PERMISSION_CLASSES': [
-            'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.UserRateThrottle',
+        'rest_framework.throttling.AnonRateThrottle',
     ],
+    'DEFAULT_THROTTLE_RATES': {
+        'user': '10000/day',
+        'anon': '1000/day',
+    },
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 5
+}
+
+SIMPLE_JWT = {
+   'ACCESS_TOKEN_LIFETIME': timedelta(days=30),
+   'AUTH_HEADER_TYPES': ('Bearer',),
+}
+
+DJOSER = {
+    'LOGIN_FIELD': 'username',
+    'SEND_ACTIVATION_EMAIL': False,
+    'HIDE_USERS': False,
+    'SERIALIZERS': {
+        'user_create': 'api.users.serializers.CustomUserCreateSerializer',
+        'user': 'api.users.serializers.CustomUserSerializer',
+        'current_user': 'api.users.serializers.CustomUserSerializer',
+    },
+    'PERMISSIONS': {
+        'user': ['djoser.permissions.CurrentUserOrAdmin'],
+        'user_list': ['rest_framework.permissions.IsAdminUser'],
+    },
 }
 
 SPECTACULAR_SETTINGS = {
@@ -150,8 +186,15 @@ SPECTACULAR_SETTINGS = {
     'DESCRIPTION': 'Car_wash_API Schema',
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
-    "SWAGGER_UI_SETTINGS": {
+    'SWAGGER_UI_SETTINGS': {
             "filter": True,  # включить поиск по тегам
         },
-    "COMPONENT_SPLIT_REQUEST": True
+    'COMPONENT_SPLIT_REQUEST': True
 }
+
+AUTH_USER_MODEL = 'users.User'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
