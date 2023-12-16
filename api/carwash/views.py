@@ -29,7 +29,7 @@ class CarWashViewSet(ReadOnlyModelViewSet):
     Если в GET-запросе передана геопозиция пользователя (latitude, longitude):
     - /carwashes/?latitude={latitude}&longitude={longitude} :
     возвращает список автомоек в заданной области,
-    определяемой параметрами LAT_RANGE и LONG_RANGE
+    определяемой параметрами LAT_RANGE и LONG_RANGE,
     в зависимости от геопозиции.
     """
 
@@ -62,7 +62,7 @@ class CarWashViewSet(ReadOnlyModelViewSet):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def get_serializer_class(self):
-        """Возвращает соответствующий класс сериализатора
+        """Возвращает соответствующий класс сериализатора в
         зависимости от действия."""
         if self.action == 'list':
             return CarWashSerializer
