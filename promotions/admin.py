@@ -9,4 +9,5 @@ class PromotionsAdmin(admin.ModelAdmin):
     list_display = ['id', 'name', 'description']
     empty_value_display = '-пусто-'
 
+
 admin.site.register(PromotionsModel, PromotionsAdmin)
