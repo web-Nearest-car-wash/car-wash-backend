@@ -18,12 +18,13 @@ class CarWashViewSet(ReadOnlyModelViewSet):
     queryset = CarWashModel.objects.all()
     serializer_class = CarWashSerializer
     permission_classes = [AllowAny]
+    http_method_names = ['get']
 
     def list(self, request):
         """Выводит список моек в заданной области
         в зависимости от геопозиции.
         Если геопозиция не передана в query_params,
-        выводит все мойки"""
+        выводит все мойки."""
         latitude_str = request.query_params.get('latitude')
         longitude_str = request.query_params.get('longitude')
 
@@ -31,14 +32,14 @@ class CarWashViewSet(ReadOnlyModelViewSet):
             latitude = Decimal(latitude_str)
             longitude = Decimal(longitude_str)
 
-            nearby_carwashes = CarWashModel.objects.filter(
+            nearby_carwashes = self.queryset.filter(
                 Q(latitude__range=(latitude - LAT_RANGE,
                   latitude + LAT_RANGE)) &
                 Q(longitude__range=(longitude - LONG_RANGE,
                   longitude + LONG_RANGE))
             )
         else:
-            nearby_carwashes = CarWashModel.objects.all()
+            nearby_carwashes = self.queryset
 
         serializer = CarWashSerializer(nearby_carwashes, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
