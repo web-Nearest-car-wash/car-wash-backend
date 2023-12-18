@@ -12,7 +12,7 @@ class CarWashTypeModelAdmin(admin.ModelAdmin):
 
 @admin.register(CarWashModel)
 class CarWashModelAdmin(admin.ModelAdmin):
-    list_display = ["id", "name", "type",]
+    list_display = ["id", "name", "latitude", "longitude", "type",]
 
 
 @admin.register(CarWashServicesModel)
