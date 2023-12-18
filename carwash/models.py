@@ -17,6 +17,45 @@ class CarWashTypeModel(models.Model):
         return f'{self.name}'
 
 
+class MetroStationModel(models.Model):
+    """Модель станции метро."""
+    name = models.CharField(verbose_name='Название', null=False, blank=False,
+                            max_length=200)
+    latitude = models.CharField(
+        verbose_name='Широта',
+        blank=False, null=False,
+        max_length=13,
+        validators=[
+            RegexValidator(
+                regex=('^-?([0-8]?[0-9]|90)(\.[0-9]{1,10})$'),
+                message='Неверное указание широты, '
+                        'должно быть вида 55.752378',
+            ),
+        ]
+    )
+    longitude = models.CharField(
+        verbose_name='Долгота',
+        blank=False,
+        null=False,
+        max_length=14,
+        validators=[
+            RegexValidator(
+                regex=('^-?([0-9]{1,2}|1[0-7][0-9]|180)(\.[0-9]{1,10})$'),
+                message='Неверное указание долготы, '
+                        'должно быть вида 55.752378',
+            ),
+        ]
+    )
+
+    class Meta:
+        verbose_name = 'Станция метро'
+        verbose_name_plural = 'Станции метро'
+        constraints = [
+            models.UniqueConstraint(fields=['latitude', 'longitude'],
+                                    name='unique_metro_coordinates')
+        ]
+
+
 class CarWashModel(models.Model):
     """Модель автомойки."""
     name = models.CharField(verbose_name='Название', null=False, blank=False,
@@ -55,6 +94,16 @@ class CarWashModel(models.Model):
 
     type = models.ForeignKey(CarWashTypeModel, verbose_name='Тип автомойки',
                              on_delete=models.CASCADE)
+    metro = models.ManyToManyField(
+        MetroStationModel,
+        through="NearestMetroStationModel",
+        verbose_name="Ближайшие станци метро.")
+    service = models.ManyToManyField(
+        ServicesModel,
+        through="CarWashServicesModel",
+        verbose_name="Оказываемые услуги"
+    )
+    over_information = models.TextField(max_length=1000, verbose_name="Доолнительная информация")
 
     class Meta:
         verbose_name = 'Автомойка'
@@ -66,45 +115,6 @@ class CarWashModel(models.Model):
 
     def __str__(self):
         return f'{self.name}'
-
-
-class MetroStationModel(models.Model):
-    """Модель станции метро."""
-    name = models.CharField(verbose_name='Название', null=False, blank=False,
-                            max_length=200)
-    latitude = models.CharField(
-        verbose_name='Широта',
-        blank=False, null=False,
-        max_length=13,
-        validators=[
-            RegexValidator(
-                regex=('^-?([0-8]?[0-9]|90)(\.[0-9]{1,10})$'),
-                message='Неверное указание широты, '
-                        'должно быть вида 55.752378',
-            ),
-        ]
-    )
-    longitude = models.CharField(
-        verbose_name='Долгота',
-        blank=False,
-        null=False,
-        max_length=14,
-        validators=[
-            RegexValidator(
-                regex=('^-?([0-9]{1,2}|1[0-7][0-9]|180)(\.[0-9]{1,10})$'),
-                message='Неверное указание долготы, '
-                        'должно быть вида 55.752378',
-            ),
-        ]
-    )
-
-    class Meta:
-        verbose_name = 'Станция метро'
-        verbose_name_plural = 'Станции метро'
-        constraints = [
-            models.UniqueConstraint(fields=['latitude', 'longitude'],
-                                    name='unique_metro_coordinates')
-        ]
 
 
 class NearestMetroStationModel(models.Model):
