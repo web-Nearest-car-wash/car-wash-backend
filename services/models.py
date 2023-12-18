@@ -7,6 +7,7 @@ class ServicesModel(models.Model):
     name = models.CharField(
         db_index=True,
         verbose_name='Название услуги',
+        max_length=200
     )
     description = models.TextField(verbose_name='Описание услуги')
 

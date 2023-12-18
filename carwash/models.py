@@ -55,6 +55,8 @@ class MetroStationModel(models.Model):
                                     name='unique_metro_coordinates')
         ]
 
+    def __str__(self):
+        return f'{self.name}'
 
 class CarWashModel(models.Model):
     """Модель автомойки."""
@@ -64,6 +66,7 @@ class CarWashModel(models.Model):
         verbose_name='Широта',
         blank=False, null=False,
         max_length=13,
+        default='55.7520233',
         validators=[
             RegexValidator(
                 regex='^-?([0-8]?[0-9]|90)(\.[0-9]{1,10})$',
@@ -77,6 +80,7 @@ class CarWashModel(models.Model):
         blank=False,
         null=False,
         max_length=14,
+        default='37.6174994',
         validators=[
             RegexValidator(
                 regex='^-?([0-9]{1,2}|1[0-7][0-9]|180)(\.[0-9]{1,10})$',
@@ -93,7 +97,7 @@ class CarWashModel(models.Model):
                                blank=True, max_length=500)
 
     type = models.ForeignKey(CarWashTypeModel, verbose_name='Тип автомойки',
-                             on_delete=models.SET_NULL)
+                             on_delete=models.SET_NULL, null=True)
     metro = models.ManyToManyField(
         MetroStationModel,
         through='NearestMetroStationModel',
@@ -105,7 +109,8 @@ class CarWashModel(models.Model):
     )
     over_information = models.TextField(
         max_length=1000,
-        verbose_name='Дополнительная информация'
+        verbose_name='Дополнительная информация',
+        null=True, blank=True
     )
 
     class Meta:
@@ -132,6 +137,13 @@ class NearestMetroStationModel(models.Model):
     distance = models.IntegerField(verbose_name='Расстояние до автомойки',
                                    blank=True, null=True)
 
+    class Meta:
+        verbose_name = 'Ближайшая станция метро'
+        verbose_name_plural = 'Ближайшие станции метро'
+
+    def __str__(self):
+        return f'{self.carwash} рядом с метро {self.metro_station}'
+
 
 class CarWashImageModel(models.Model):
     """Модель для фотографий для автомойки."""
@@ -155,6 +167,13 @@ class CarWashServicesModel(models.Model):
     service = models.ForeignKey(ServicesModel, verbose_name='Услуга',
                                 on_delete=models.CASCADE)
     price = models.IntegerField(verbose_name='Цена', blank=True, null=True)
+
+    class Meta:
+        verbose_name = 'Цена услуги'
+        verbose_name_plural = 'Цены услуг'
+
+    def __str__(self):
+        return f'{self.service}'
 
 
 class PromotionsModel(models.Model):
