@@ -103,7 +103,10 @@ class CarWashModel(models.Model):
         through='CarWashServicesModel',
         verbose_name='Оказываемые услуги'
     )
-    over_information = models.TextField(max_length=1000, verbose_name='Дополнительная информация')
+    over_information = models.TextField(
+        max_length=1000,
+        verbose_name='Дополнительная информация'
+    )
 
     class Meta:
         verbose_name = 'Автомойка'
