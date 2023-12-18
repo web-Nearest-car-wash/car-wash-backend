@@ -12,3 +12,8 @@ USERS_API_SCHEMA_EXTENSIONS = {
     'destroy': extend_schema(summary="Удалить пользователя"),
     'retrieve': extend_schema(summary="Получить данные о пользователе")
 }
+
+CARWASH_API_SCHEMA_EXTENSIONS = {
+    'list': extend_schema(summary="Получить список автомоек"),
+    'retrieve': extend_schema(summary="Получить данные для карточки мойки")
+}

@@ -51,9 +51,10 @@ INSTALLED_APPS = [
     'phonenumber_field',
     'users',
     'carwash',
+    'contacts',
+    'promotions',
     'schedule',
     'services',
-    'contacts',
 ]
 
 MIDDLEWARE = [
