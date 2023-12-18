@@ -10,7 +10,6 @@ class ServisesModel(models.Model):
     )
     description = models.TextField(verbose_name='Описание услуги')
 
-
     class Meta:
         ordering = ('name',)
         verbose_name = 'Услуга'
