@@ -93,7 +93,7 @@ class CarWashModel(models.Model):
                                blank=True, max_length=500)
 
     type = models.ForeignKey(CarWashTypeModel, verbose_name='Тип автомойки',
-                             on_delete=models.CASCADE)
+                             on_delete=models.SET_NULL)
     metro = models.ManyToManyField(
         MetroStationModel,
         through='NearestMetroStationModel',
