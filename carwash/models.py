@@ -1,7 +1,7 @@
 from django.core.validators import RegexValidator
 from django.db import models
 
-from services.models import ServiсesModel
+from services.models import ServicesModel
 
 
 class CarWashTypeModel(models.Model):
@@ -99,7 +99,7 @@ class CarWashModel(models.Model):
         through='NearestMetroStationModel',
         verbose_name='Ближайшие станции метро.')
     service = models.ManyToManyField(
-        ServiсesModel,
+        ServicesModel,
         through='CarWashServicesModel',
         verbose_name='Оказываемые услуги'
     )
@@ -152,7 +152,7 @@ class CarWashServicesModel(models.Model):
     """Модель для цен на услуги автомойки."""
     carwash = models.ForeignKey(CarWashModel, verbose_name='Автомойка',
                                 on_delete=models.CASCADE)
-    service = models.ForeignKey(ServiсesModel, verbose_name='Услуга',
+    service = models.ForeignKey(ServicesModel, verbose_name='Услуга',
                                 on_delete=models.CASCADE)
     price = models.IntegerField(verbose_name='Цена', blank=True, null=True)
 

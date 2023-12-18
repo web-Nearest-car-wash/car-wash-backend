@@ -1,7 +1,7 @@
 from django.db import models
 
 
-class ServiсesModel(models.Model):
+class ServicesModel(models.Model):
     """Класс услуг автомойки."""
 
     name = models.CharField(
