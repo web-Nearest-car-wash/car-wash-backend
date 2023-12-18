@@ -1,13 +1,13 @@
 from django.contrib import admin
 
-from .models import Servises
+from .models import ServisesModel
 
 
 class ServisesAdmin(admin.ModelAdmin):
-    """Класс услуг."""
+    """Класс админки услуг."""
 
-    list_display = ('id', 'name')
+    list_display = ('id', 'name', 'description')
     empty_value_display = '-пусто-'
 
 
-admin.site.register(Servises, ServisesAdmin)
+admin.site.register(ServisesModel, ServisesAdmin)

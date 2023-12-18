@@ -1,13 +1,15 @@
 from django.db import models
 
 
-class Servises(models.Model):
-    """Класс, представляющий модель услуг автомойки."""
+class ServisesModel(models.Model):
+    """Класс услуг автомойки."""
 
     name = models.CharField(
         db_index=True,
-        verbose_name='Название',
+        verbose_name='Название услуги',
     )
+    description = models.TextField(verbose_name='Описание услуги')
+
 
     class Meta:
         ordering = ('name',)
