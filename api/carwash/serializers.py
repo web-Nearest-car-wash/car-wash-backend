@@ -13,6 +13,7 @@ class CarWashTypeSerializer(ModelSerializer):
 class CarWashCardSerializer(ModelSerializer):
     """Сериализатор для карточки мойки"""
     type = CarWashTypeSerializer()
+
     class Meta:
         fields = '__all__'
         model = CarWashModel

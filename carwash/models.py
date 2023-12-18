@@ -58,6 +58,7 @@ class MetroStationModel(models.Model):
     def __str__(self):
         return f'{self.name}'
 
+
 class CarWashModel(models.Model):
     """Модель автомойки."""
     name = models.CharField(verbose_name='Название', null=False, blank=False,
