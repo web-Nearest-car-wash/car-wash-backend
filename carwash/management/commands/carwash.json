@@ -1,0 +1,22 @@
+[
+  {
+    "name": "business",
+
+    "coordinates": [
+      37.613101,
+      55.615925
+    ],
+    "type": "business"
+
+  },
+  {
+    "name": "NEW_BUSINESS",
+
+    "coordinates": [
+      37.613102,
+      55.615923
+    ],
+    "type": "business"
+
+  }
+]

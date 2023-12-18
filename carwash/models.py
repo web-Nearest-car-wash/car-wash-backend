@@ -1,7 +1,7 @@
 from django.core.validators import RegexValidator
 from django.db import models
 
-from services.models import ServicesModel
+from services.models import ServiсesModel
 
 
 class CarWashTypeModel(models.Model):
@@ -27,7 +27,7 @@ class MetroStationModel(models.Model):
         max_length=13,
         validators=[
             RegexValidator(
-                regex=('^-?([0-8]?[0-9]|90)(\.[0-9]{1,10})$'),
+                regex='^-?([0-8]?[0-9]|90)(\.[0-9]{1,10})$',
                 message='Неверное указание широты, '
                         'должно быть вида 55.752378',
             ),
@@ -40,7 +40,7 @@ class MetroStationModel(models.Model):
         max_length=14,
         validators=[
             RegexValidator(
-                regex=('^-?([0-9]{1,2}|1[0-7][0-9]|180)(\.[0-9]{1,10})$'),
+                regex='^-?([0-9]{1,2}|1[0-7][0-9]|180)(\.[0-9]{1,10})$',
                 message='Неверное указание долготы, '
                         'должно быть вида 55.752378',
             ),
@@ -66,7 +66,7 @@ class CarWashModel(models.Model):
         max_length=13,
         validators=[
             RegexValidator(
-                regex=('^-?([0-8]?[0-9]|90)(\.[0-9]{1,10})$'),
+                regex='^-?([0-8]?[0-9]|90)(\.[0-9]{1,10})$',
                 message='Неверное указание широты, '
                         'должно быть вида 55.752378',
             ),
@@ -79,7 +79,7 @@ class CarWashModel(models.Model):
         max_length=14,
         validators=[
             RegexValidator(
-                regex=('^-?([0-9]{1,2}|1[0-7][0-9]|180)(\.[0-9]{1,10})$'),
+                regex='^-?([0-9]{1,2}|1[0-7][0-9]|180)(\.[0-9]{1,10})$',
                 message='Неверное указание долготы, '
                         'должно быть вида 55.752378',
             ),
@@ -97,9 +97,9 @@ class CarWashModel(models.Model):
     metro = models.ManyToManyField(
         MetroStationModel,
         through='NearestMetroStationModel',
-        verbose_name='Ближайшие станци метро.')
+        verbose_name='Ближайшие станции метро.')
     service = models.ManyToManyField(
-        ServicesModel,
+        ServiсesModel,
         through='CarWashServicesModel',
         verbose_name='Оказываемые услуги'
     )
@@ -124,7 +124,7 @@ class NearestMetroStationModel(models.Model):
     """Промежуточная модель связи станции метро и автомойки."""
     carwash = models.ForeignKey(CarWashModel, verbose_name='Автомойка',
                                 on_delete=models.CASCADE)
-    metrostation = models.ForeignKey(
+    metro_station = models.ForeignKey(
         MetroStationModel,
         verbose_name='Станция метро',
         on_delete=models.CASCADE
@@ -152,7 +152,7 @@ class CarWashServicesModel(models.Model):
     """Модель для цен на услуги автомойки."""
     carwash = models.ForeignKey(CarWashModel, verbose_name='Автомойка',
                                 on_delete=models.CASCADE)
-    service = models.ForeignKey(ServicesModel, verbose_name='Услуга',
+    service = models.ForeignKey(ServiсesModel, verbose_name='Услуга',
                                 on_delete=models.CASCADE)
     price = models.IntegerField(verbose_name='Цена', blank=True, null=True)
 
