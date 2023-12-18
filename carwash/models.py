@@ -96,14 +96,14 @@ class CarWashModel(models.Model):
                              on_delete=models.CASCADE)
     metro = models.ManyToManyField(
         MetroStationModel,
-        through="NearestMetroStationModel",
-        verbose_name="Ближайшие станци метро.")
+        through='NearestMetroStationModel',
+        verbose_name='Ближайшие станци метро.')
     service = models.ManyToManyField(
         ServicesModel,
-        through="CarWashServicesModel",
-        verbose_name="Оказываемые услуги"
+        through='CarWashServicesModel',
+        verbose_name='Оказываемые услуги'
     )
-    over_information = models.TextField(max_length=1000, verbose_name="Доолнительная информация")
+    over_information = models.TextField(max_length=1000, verbose_name='Дополнительная информация')
 
     class Meta:
         verbose_name = 'Автомойка'
