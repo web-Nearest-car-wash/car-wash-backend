@@ -1,7 +1,19 @@
 from django.db import models
 
 
-class ServicesModel(models.Model):
-    """Модель для оказываемых услуг."""
-    name = models.CharField(verbose_name='Услуга', blank=False,
-                            null=False, max_length=200, unique=True)
+class ServisesModel(models.Model):
+    """Класс услуг автомойки."""
+
+    name = models.CharField(
+        db_index=True,
+        verbose_name='Название услуги',
+    )
+    description = models.TextField(verbose_name='Описание услуги')
+
+    class Meta:
+        ordering = ('name',)
+        verbose_name = 'Услуга'
+        verbose_name_plural = 'Услуги'
+
+    def __str__(self):
+        return {self.name}

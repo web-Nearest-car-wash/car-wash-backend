@@ -3,8 +3,8 @@ from django.db import models
 from carwash.models import CarWashModel
 
 
-class Contacts(models.Model):
-    """Класс, представляющий модель контактов автомойки."""
+class ContactsModel(models.Model):
+    """Класс контактов автомойки."""
 
     carwash = models.ForeignKey(
         CarWashModel,
