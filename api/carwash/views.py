@@ -1,6 +1,6 @@
 from decimal import Decimal
 
-from django.db.models import Q
+from django.db.models import Avg, Q
 from drf_spectacular.utils import extend_schema_view
 from rest_framework import status
 from rest_framework.permissions import AllowAny
@@ -33,7 +33,7 @@ class CarWashViewSet(ReadOnlyModelViewSet):
     в зависимости от геопозиции.
     """
 
-    queryset = CarWashModel.objects.all()
+    queryset = CarWashModel.objects.annotate(rating=Avg('scores__score'))
     serializer_class = CarWashSerializer
     permission_classes = [AllowAny]
     http_method_names = ['get']
