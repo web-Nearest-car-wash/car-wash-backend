@@ -50,10 +50,10 @@ class CarWashViewSet(ReadOnlyModelViewSet):
             longitude = Decimal(longitude_str)
 
             nearby_carwashes = self.queryset.filter(
-                Q(latitude__range=(Decimal(latitude) - LAT_RANGE,
-                  Decimal(latitude) + LAT_RANGE)) &
-                Q(longitude__range=(Decimal(longitude) - LONG_RANGE,
-                  Decimal(longitude) + LONG_RANGE))
+                Q(latitude__range=(latitude - LAT_RANGE,
+                  latitude + LAT_RANGE)) &
+                Q(longitude__range=(longitude - LONG_RANGE,
+                  longitude + LONG_RANGE))
             )
         else:
             nearby_carwashes = self.queryset
