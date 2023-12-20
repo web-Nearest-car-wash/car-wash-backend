@@ -137,12 +137,19 @@ class NearestMetroStationModel(models.Model):
         verbose_name='Станция метро',
         on_delete=models.CASCADE
     )
-    distance = models.IntegerField(verbose_name='Расстояние до автомойки',
-                                   blank=True, null=True)
+    distance = models.PositiveIntegerField(
+        verbose_name='Расстояние до автомойки',
+        blank=True, null=True
+    )
 
     class Meta:
         verbose_name = 'Ближайшая станция метро'
         verbose_name_plural = 'Ближайшие станции метро'
+        constraints = [
+            models.UniqueConstraint(
+                fields=['carwash', 'metro_station'],
+                name='unique_carwash_metro')
+        ]
 
     def __str__(self):
         return f'{self.carwash} рядом с метро {self.metro_station}'
