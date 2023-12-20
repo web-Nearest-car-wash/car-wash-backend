@@ -33,9 +33,7 @@ class CarWashViewSet(ReadOnlyModelViewSet):
     в зависимости от геопозиции.
     """
 
-    queryset = CarWashModel.objects.prefetch_related(
-        'carwashratingmodel_set'
-    ).annotate(rating=Avg('carwashratingmodel__score'))
+    queryset = CarWashModel.objects.annotate(rating=Avg('carwashratingmodel__score'))
     serializer_class = CarWashSerializer
     permission_classes = [AllowAny]
     http_method_names = ['get']
