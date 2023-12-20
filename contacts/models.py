@@ -6,10 +6,10 @@ from carwash.models import CarWashModel
 class ContactsModel(models.Model):
     """Класс контактов автомойки."""
 
-    carwash = models.ForeignKey(
+    carwash = models.OneToOneField(
         CarWashModel,
         on_delete=models.CASCADE,
-        related_name='contacts',
+        primary_key=True,
         verbose_name='Мойка',
     )
     address = models.CharField(max_length=200, verbose_name='Адрес')
