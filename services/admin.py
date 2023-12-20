@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import ServisesModel
+from .models import ServicesModel
 
 
 class ServisesAdmin(admin.ModelAdmin):
@@ -10,4 +10,4 @@ class ServisesAdmin(admin.ModelAdmin):
     empty_value_display = '-пусто-'
 
 
-admin.site.register(ServisesModel, ServisesAdmin)
+admin.site.register(ServicesModel, ServisesAdmin)
