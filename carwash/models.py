@@ -1,10 +1,9 @@
 from django.core.validators import RegexValidator
 from django.db import models
 
+from core.constants import SCORES
 from services.models import ServicesModel
 from users.models import User
-
-SCORES = ((1, 1), (2, 2), (3, 3), (4, 4), (5, 5))
 
 
 class CarWashTypeModel(models.Model):

@@ -1,16 +1,7 @@
 from django.db import models
 
 from carwash.models import CarWashModel
-
-DAYS_OF_WEEK = [
-    (1, 'Понедельник'),
-    (2, 'Вторник'),
-    (3, 'Среда'),
-    (4, 'Четверг'),
-    (5, 'Пятница'),
-    (6, 'Суббота'),
-    (7, 'Воскресенье'),
-]
+from core.constants import DAYS_OF_WEEK
 
 
 class ScheduleModel(models.Model):
