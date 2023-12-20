@@ -1,8 +1,8 @@
 from django.contrib import admin
 
-from carwash.models import (CarWashModel, CarWashServicesModel,
-                            CarWashTypeModel, MetroStationModel,
-                            NearestMetroStationModel)
+from carwash.models import (CarWashModel, CarWashRatingModel,
+                            CarWashServicesModel, CarWashTypeModel,
+                            MetroStationModel, NearestMetroStationModel)
 
 
 @admin.register(CarWashTypeModel)
@@ -28,3 +28,8 @@ class NearestMetroStationModelAdmin(admin.ModelAdmin):
 @admin.register(MetroStationModel)
 class MetroStationModelAdmin(admin.ModelAdmin):
     list_display = ["name", "latitude", "longitude"]
+
+
+@admin.register(CarWashRatingModel)
+class CarWashRatingModelAdmin(admin.ModelAdmin):
+    list_display = ["carwash", "score", "user", 'pub_date']

@@ -1,5 +1,18 @@
 from drf_spectacular.utils import extend_schema
 
+
+DAYS_OF_WEEK = [
+    (1, 'Понедельник'),
+    (2, 'Вторник'),
+    (3, 'Среда'),
+    (4, 'Четверг'),
+    (5, 'Пятница'),
+    (6, 'Суббота'),
+    (7, 'Воскресенье'),
+]
+
+SCORES = ((1, 1), (2, 2), (3, 3), (4, 4), (5, 5))
+
 USERS_API_SCHEMA_EXTENSIONS = {
     'list': extend_schema(summary="Получить список пользователей"),
     'update': extend_schema(summary="Изменения данных о пользователе"),

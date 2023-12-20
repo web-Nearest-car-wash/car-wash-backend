@@ -1,7 +1,9 @@
 from django.core.validators import RegexValidator
 from django.db import models
 
+from core.constants import SCORES
 from services.models import ServicesModel
+from users.models import User
 
 
 class CarWashTypeModel(models.Model):
@@ -135,12 +137,19 @@ class NearestMetroStationModel(models.Model):
         verbose_name='Станция метро',
         on_delete=models.CASCADE
     )
-    distance = models.IntegerField(verbose_name='Расстояние до автомойки',
-                                   blank=True, null=True)
+    distance = models.PositiveIntegerField(
+        verbose_name='Расстояние до автомойки',
+        blank=True, null=True
+    )
 
     class Meta:
         verbose_name = 'Ближайшая станция метро'
         verbose_name_plural = 'Ближайшие станции метро'
+        constraints = [
+            models.UniqueConstraint(
+                fields=['carwash', 'metro_station'],
+                name='unique_carwash_metro')
+        ]
 
     def __str__(self):
         return f'{self.carwash} рядом с метро {self.metro_station}'
@@ -189,3 +198,37 @@ class PromotionsModel(models.Model):
 
     def __str__(self):
         return f'{self.text[:150]}'
+
+
+class CarWashRatingModel(models.Model):
+    score = models.IntegerField(
+        verbose_name='Оценка',
+        choices=SCORES
+    )
+    pub_date = models.DateTimeField(
+        verbose_name='Дата публикации',
+        auto_now_add=True
+    )
+    user = models.ForeignKey(
+        User, on_delete=models.SET_NULL,
+        verbose_name='Пользователь',
+        null=True, blank=True
+    )
+    carwash = models.ForeignKey(
+        CarWashModel,
+        on_delete=models.CASCADE,
+    )
+
+    class Meta:
+        verbose_name = 'Оценка автомойки'
+        verbose_name_plural = 'Оценки автомоек'
+        ordering = ('-pub_date',)
+        constraints = [
+            models.UniqueConstraint(
+                fields=('carwash', 'user'),
+                name='unique_carwash_user'
+            )
+        ]
+
+    def __str__(self):
+        return f'{self.score}'
