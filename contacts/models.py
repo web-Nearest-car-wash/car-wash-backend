@@ -8,8 +8,8 @@ class ContactsModel(models.Model):
 
     carwash = models.OneToOneField(
         CarWashModel,
-        on_delete = models.CASCADE,
-        primary_key = True,
+        on_delete=models.CASCADE,
+        primary_key=True,
         verbose_name='Мойка',
     )
     address = models.CharField(max_length=200, verbose_name='Адрес')
