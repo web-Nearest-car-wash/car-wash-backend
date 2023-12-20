@@ -211,14 +211,13 @@ class CarWashRatingModel(models.Model):
     )
     user = models.ForeignKey(
         User, on_delete=models.SET_NULL,
-        related_name='scores',
         verbose_name='Пользователь',
         null=True, blank=True
     )
     carwash = models.ForeignKey(
         CarWashModel,
         on_delete=models.CASCADE,
-        related_name='scores')
+    )
 
     class Meta:
         verbose_name = 'Оценка автомойки'
