@@ -1,4 +1,5 @@
 from django.db.models import Avg
+from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import extend_schema_view
 from rest_framework.permissions import AllowAny
 from rest_framework.viewsets import ReadOnlyModelViewSet
@@ -32,7 +33,7 @@ class CarWashViewSet(ReadOnlyModelViewSet):
     queryset = CarWashModel.objects.all().annotate(
         rating=Avg('carwashratingmodel__score'))
     serializer_class = CarWashSerializer
-    filterset_fields = ('latitude', 'longitude')
+    filter_backends = (DjangoFilterBackend,)
     filterset_class = CarWashFilter
     permission_classes = [AllowAny]
     http_method_names = ['get']
