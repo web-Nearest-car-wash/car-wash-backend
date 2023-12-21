@@ -1,5 +1,11 @@
 from drf_spectacular.utils import extend_schema
 
+PAYMENT_CHOICES = (
+    ('cash', 'Наличные'),
+    ('card', 'Картой'),
+    ('online', 'Онлайн'),
+    ('SBP', 'СБП'),
+)
 
 DAYS_OF_WEEK = [
     (1, 'Понедельник'),

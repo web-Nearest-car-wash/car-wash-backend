@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'django_filters',
     'drf_spectacular',
     'phonenumber_field',
+    'multiselectfield',
     'users',
     'carwash',
     'contacts',

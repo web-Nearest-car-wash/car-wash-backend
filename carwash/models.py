@@ -175,21 +175,7 @@ class CarWashServicesModel(models.Model):
         verbose_name_plural = 'Цены услуг'
 
     def __str__(self):
-        return f'{self.service}'
-
-
-class PromotionsModel(models.Model):
-    """Модель акции автомойки."""
-    carwash = models.ForeignKey(CarWashModel, verbose_name='Автомойка',
-                                on_delete=models.CASCADE)
-    text = models.TextField(max_length=1000)
-
-    class Meta:
-        verbose_name = 'Акция автомойки'
-        verbose_name_plural = 'Акции автомойки'
-
-    def __str__(self):
-        return f'{self.text[:150]}'
+        return f'{self.service.name}, {self.service.description}, {self.price}'
 
 
 class CarWashRatingModel(models.Model):
