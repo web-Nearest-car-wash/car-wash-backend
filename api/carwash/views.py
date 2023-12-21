@@ -1,6 +1,7 @@
 from decimal import Decimal
 
 from django.db.models import Avg, Q
+from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import extend_schema_view
 from rest_framework import status
 from rest_framework.permissions import AllowAny
@@ -10,6 +11,7 @@ from rest_framework.viewsets import ReadOnlyModelViewSet
 from carwash.models import CarWashModel
 from core.constants import CARWASH_API_SCHEMA_EXTENSIONS
 from .constants import LAT_RANGE, LONG_RANGE
+from .filters import CarWashFilter
 from .serializers import CarWashSerializer, CarWashCardSerializer
 
 
@@ -33,9 +35,12 @@ class CarWashViewSet(ReadOnlyModelViewSet):
     в зависимости от геопозиции.
     """
 
-    queryset = CarWashModel.objects.annotate(
+    queryset = CarWashModel.objects.all().annotate(
         rating=Avg('carwashratingmodel__score'))
     serializer_class = CarWashSerializer
+    filter_backends = (DjangoFilterBackend,)
+    filterset_fields = ('latitude', 'longitude')
+    filterset_class = CarWashFilter
     permission_classes = [AllowAny]
     http_method_names = ['get']
 
