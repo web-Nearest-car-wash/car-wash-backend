@@ -2,14 +2,18 @@ from django.db import models
 
 
 class ServicesModel(models.Model):
-    """Класс услуг автомойки."""
+    """Модель услуг автомойки."""
 
     name = models.CharField(
         db_index=True,
+        max_length=200,
         verbose_name='Название услуги',
-        max_length=200
     )
     description = models.TextField(verbose_name='Описание услуги')
+    rest_room = models.BooleanField(
+        verbose_name='Комната отдыха',
+        default=False,
+    )
 
     class Meta:
         ordering = ('name',)
@@ -17,4 +21,4 @@ class ServicesModel(models.Model):
         verbose_name_plural = 'Услуги'
 
     def __str__(self):
-        return {self.name}
+        return self.name
