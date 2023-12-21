@@ -1,4 +1,4 @@
-from django.core.validators import RegexValidator
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 
 from core.constants import SCORES
@@ -23,29 +23,25 @@ class MetroStationModel(models.Model):
     """Модель станции метро."""
     name = models.CharField(verbose_name='Название', null=False, blank=False,
                             max_length=200)
-    latitude = models.CharField(
+    latitude = models.DecimalField(
         verbose_name='Широта',
         blank=False, null=False,
-        max_length=13,
+        max_digits=8,
+        decimal_places=6,
         validators=[
-            RegexValidator(
-                regex='^-?([0-8]?[0-9]|90)(\.[0-9]{1,10})$',
-                message='Неверное указание широты, '
-                        'должно быть вида 55.752378',
-            ),
+            MinValueValidator(-90),
+            MaxValueValidator(90)
         ]
     )
-    longitude = models.CharField(
+    longitude = models.DecimalField(
         verbose_name='Долгота',
         blank=False,
         null=False,
-        max_length=14,
+        max_digits=9,
+        decimal_places=6,
         validators=[
-            RegexValidator(
-                regex='^-?([0-9]{1,2}|1[0-7][0-9]|180)(\.[0-9]{1,10})$',
-                message='Неверное указание долготы, '
-                        'должно быть вида 55.752378',
-            ),
+            MinValueValidator(-180),
+            MaxValueValidator(180)
         ]
     )
 
@@ -65,31 +61,27 @@ class CarWashModel(models.Model):
     """Модель автомойки."""
     name = models.CharField(verbose_name='Название', null=False, blank=False,
                             max_length=200)
-    latitude = models.CharField(
+    latitude = models.DecimalField(
         verbose_name='Широта',
         blank=False, null=False,
-        max_length=13,
+        max_digits=8,
+        decimal_places=6,
         default='55.7520233',
         validators=[
-            RegexValidator(
-                regex='^-?([0-8]?[0-9]|90)(\.[0-9]{1,10})$',
-                message='Неверное указание широты, '
-                        'должно быть вида 55.752378',
-            ),
+            MinValueValidator(-90),
+            MaxValueValidator(90)
         ]
     )
-    longitude = models.CharField(
+    longitude = models.DecimalField(
         verbose_name='Долгота',
         blank=False,
         null=False,
-        max_length=14,
+        max_digits=9,
+        decimal_places=6,
         default='37.6174994',
         validators=[
-            RegexValidator(
-                regex='^-?([0-9]{1,2}|1[0-7][0-9]|180)(\.[0-9]{1,10})$',
-                message='Неверное указание долготы, '
-                        'должно быть вида 55.752378',
-            ),
+            MinValueValidator(-180),
+            MaxValueValidator(180)
         ]
     )
     legal_person = models.BooleanField(
