@@ -10,6 +10,10 @@ class ServicesModel(models.Model):
         verbose_name='Название услуги',
     )
     description = models.TextField(verbose_name='Описание услуги')
+    rest_room = models.BooleanField(
+        verbose_name='Комната отдыха',
+        default=False,
+    )
 
     class Meta:
         ordering = ('name',)
