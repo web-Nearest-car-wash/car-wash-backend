@@ -4,7 +4,7 @@ from carwash.models import CarWashModel
 
 
 class ContactsModel(models.Model):
-    """Класс контактов автомойки."""
+    """Модель контактов автомойки."""
 
     carwash = models.OneToOneField(
         CarWashModel,
@@ -14,6 +14,7 @@ class ContactsModel(models.Model):
     )
     address = models.CharField(max_length=200, verbose_name='Адрес')
     phone = models.CharField(max_length=15, verbose_name='Телефон')
+    website = models.CharField(max_length=200, verbose_name='Вебсайт')
 
     class Meta:
         ordering = ('carwash',)
@@ -22,4 +23,4 @@ class ContactsModel(models.Model):
 
     def __str__(self):
         return (f'{self.carwash}, телефон: {self.phone}'
-                f'адрес: {self.address}')
+                f'адрес: {self.address}, сайт: {self.website}')
