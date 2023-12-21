@@ -26,8 +26,8 @@ class MetroStationModel(models.Model):
     latitude = models.DecimalField(
         verbose_name='Широта',
         blank=False, null=False,
-        max_digits=11,
-        decimal_places=9,
+        max_digits=8,
+        decimal_places=6,
         validators=[
             MinValueValidator(-90),
             MaxValueValidator(90)
@@ -37,8 +37,8 @@ class MetroStationModel(models.Model):
         verbose_name='Долгота',
         blank=False,
         null=False,
-        max_digits=12,
-        decimal_places=9,
+        max_digits=9,
+        decimal_places=6,
         validators=[
             MinValueValidator(-180),
             MaxValueValidator(180)
@@ -64,8 +64,8 @@ class CarWashModel(models.Model):
     latitude = models.DecimalField(
         verbose_name='Широта',
         blank=False, null=False,
-        max_digits=11,
-        decimal_places=9,
+        max_digits=8,
+        decimal_places=6,
         default='55.7520233',
         validators=[
             MinValueValidator(-90),
@@ -76,8 +76,8 @@ class CarWashModel(models.Model):
         verbose_name='Долгота',
         blank=False,
         null=False,
-        max_digits=12,
-        decimal_places=9,
+        max_digits=9,
+        decimal_places=6,
         default='37.6174994',
         validators=[
             MinValueValidator(-180),

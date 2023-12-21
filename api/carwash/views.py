@@ -1,16 +1,10 @@
-from decimal import Decimal
-
-from django.db.models import Avg, Q
-from django_filters.rest_framework import DjangoFilterBackend
+from django.db.models import Avg
 from drf_spectacular.utils import extend_schema_view
-from rest_framework import status
 from rest_framework.permissions import AllowAny
-from rest_framework.response import Response
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
 from carwash.models import CarWashModel
 from core.constants import CARWASH_API_SCHEMA_EXTENSIONS
-from .constants import LAT_RANGE, LONG_RANGE
 from .filters import CarWashFilter
 from .serializers import CarWashSerializer, CarWashCardSerializer
 
@@ -38,34 +32,10 @@ class CarWashViewSet(ReadOnlyModelViewSet):
     queryset = CarWashModel.objects.all().annotate(
         rating=Avg('carwashratingmodel__score'))
     serializer_class = CarWashSerializer
-    filter_backends = (DjangoFilterBackend,)
     filterset_fields = ('latitude', 'longitude')
     filterset_class = CarWashFilter
     permission_classes = [AllowAny]
     http_method_names = ['get']
-
-    def list(self, request):
-        """Выводит список моек в заданной области.
-        Если геопозиция пользователя не передана,
-        выводит все мойки."""
-        latitude_str = request.query_params.get('latitude')
-        longitude_str = request.query_params.get('longitude')
-
-        if latitude_str and longitude_str:
-            latitude = Decimal(latitude_str)
-            longitude = Decimal(longitude_str)
-
-            nearby_carwashes = self.queryset.filter(
-                Q(latitude__range=(latitude - LAT_RANGE,
-                  latitude + LAT_RANGE)) &
-                Q(longitude__range=(longitude - LONG_RANGE,
-                  longitude + LONG_RANGE))
-            )
-        else:
-            nearby_carwashes = self.queryset
-
-        serializer = CarWashSerializer(nearby_carwashes, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def get_serializer_class(self):
         """Возвращает соответствующий класс сериализатора в
