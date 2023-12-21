@@ -16,8 +16,17 @@ python-dotenv = "^1.0.0"
 djoser = "^2.2.2"
 djangorestframework-simplejwt = "^5.3.1"
 django-phonenumber-field = {extras = ["phonenumbers"], version = "^7.2.0"}
+tasks = "^2.8.0"
+gunicorn = "^21.2.0"
 
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+
+[tool.taskipy.tasks]
+start = "gunicorn config.wsgi:application --bind"
+migrate = "python manage.py migrate"
+createsuperuser = "python manage.py createsuperuser"
+collectstatic = "python manage.py collectstatic --no-input"
