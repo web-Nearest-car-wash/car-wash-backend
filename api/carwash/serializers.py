@@ -1,7 +1,6 @@
 from rest_framework.serializers import FloatField, ModelSerializer
 
 from carwash.models import CarWashModel, CarWashTypeModel
-from .utils import cut_zeros
 
 
 class CarWashTypeSerializer(ModelSerializer):
@@ -22,10 +21,6 @@ class CarWashCardSerializer(ModelSerializer):
                   'over_information', 'metro', 'service')
         model = CarWashModel
 
-    def to_representation(self, instance):
-        serializer = super().to_representation(instance)
-        return cut_zeros(serializer)
-
 
 class CarWashSerializer(ModelSerializer):
     """Сериализатор для вывода моек на главной странице"""
@@ -37,7 +32,3 @@ class CarWashSerializer(ModelSerializer):
                   'latitude', 'longitude', 'loyalty',
                   'over_information', 'metro', 'service')
         model = CarWashModel
-
-    def to_representation(self, instance):
-        serializer = super().to_representation(instance)
-        return cut_zeros(serializer)
