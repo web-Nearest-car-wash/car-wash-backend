@@ -19,11 +19,10 @@ class CarWashFilter(FilterSet):
         latitude = self.data.get('latitude')
         longitude = self.data.get('longitude')
         if latitude and longitude:
-            nearby_carwashes = queryset.filter(
+            return queryset.filter(
                 Q(latitude__range=(Decimal(latitude) - LAT_RANGE,
                   Decimal(latitude) + LAT_RANGE)) &
                 Q(longitude__range=(Decimal(longitude) - LONG_RANGE,
                   Decimal(longitude) + LONG_RANGE))
             )
-            return nearby_carwashes
         return queryset
