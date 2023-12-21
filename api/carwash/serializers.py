@@ -28,15 +28,9 @@ class CarWashServicesSerializer(ModelSerializer):
     description = serializers.ReadOnlyField(
         source='service.description', read_only=True
     )
-    rest_room = serializers.BooleanField(
-        source='service.rest_room', read_only=True
-    )
-    payment = serializers.MultipleChoiceField(
-        source='service.payment', read_only=True, choices=PAYMENT_CHOICES
-    )
 
     class Meta:
-        fields = ('name', 'description', 'price', 'rest_room', 'payment')
+        fields = ('name', 'description', 'price')
         model = CarWashServicesModel
 
 
@@ -120,6 +114,10 @@ class CarWashCardSerializer(ModelSerializer):
     )
     promotions = CarWashPromotionsSerializer(many=True, read_only=True)
     image = serializers.SerializerMethodField()
+    rest_room = serializers.BooleanField()
+    payment = serializers.MultipleChoiceField(
+        read_only=True, choices=PAYMENT_CHOICES
+    )
 
     class Meta:
         fields = (
@@ -131,7 +129,9 @@ class CarWashCardSerializer(ModelSerializer):
             'metro',
             'name',
             'promotions',
+            'payment',
             'rating',
+            'rest_room',
             'schedule',
             'services',
             'type',

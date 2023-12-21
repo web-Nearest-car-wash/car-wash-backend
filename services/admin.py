@@ -6,7 +6,7 @@ from .models import ServicesModel
 class ServicesAdmin(admin.ModelAdmin):
     """Класс админки услуг."""
 
-    list_display = ('id', 'name', 'description', 'rest_room')
+    list_display = ('id', 'name', 'description')
     empty_value_display = '-пусто-'
 
 
