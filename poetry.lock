@@ -330,6 +330,20 @@ files = [
 Django = ">=3.2"
 
 [[package]]
+name = "django-multiselectfield"
+version = "0.1.12"
+description = "Django multiple select field"
+optional = false
+python-versions = "*"
+files = [
+    {file = "django-multiselectfield-0.1.12.tar.gz", hash = "sha256:d0a4c71568fb2332c71478ffac9f8708e01314a35cf923dfd7a191343452f9f9"},
+    {file = "django_multiselectfield-0.1.12-py3-none-any.whl", hash = "sha256:c270faa7f80588214c55f2d68cbddb2add525c2aa830c216b8a198de914eb470"},
+]
+
+[package.dependencies]
+django = ">=1.4"
+
+[[package]]
 name = "django-phonenumber-field"
 version = "7.2.0"
 description = "An international phone number field for django models."
@@ -1205,4 +1219,5 @@ test = ["covdefaults (>=2.3)", "coverage (>=7.2.7)", "coverage-enable-subprocess
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
+
 content-hash = "95eb378a0ed78ec189df9da6be9c0292e0aa63d5b35640ba280da2f5a904c6d4"
