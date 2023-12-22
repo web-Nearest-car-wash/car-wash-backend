@@ -153,8 +153,9 @@ class CarWashCardSerializer(ModelSerializer):
 
     @staticmethod
     def get_contacts(obj):
-        queryset = ContactsModel.objects.filter(carwash=obj).first()
-        # queryset = obj.contactsmodel_
+        queryset = ContactsModel.objects.filter(
+            carwash=obj
+        ).first()
         return CarWashContactsSerializer(queryset).data
 
 
