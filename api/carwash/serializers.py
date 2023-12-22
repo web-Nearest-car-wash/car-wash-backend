@@ -65,7 +65,6 @@ class CarWashScheduleSerializer(ModelSerializer):
     day_of_week = serializers.SerializerMethodField()
     open_until = serializers.SerializerMethodField()
 
-
     class Meta:
         fields = (
             'day_of_week',
@@ -93,7 +92,8 @@ class CarWashScheduleSerializer(ModelSerializer):
             if today_schedule.opening_time and today_schedule.closing_time:
                     if current_time < today_schedule.closing_time:
                         return ('Работает до '
-                            f'{today_schedule.closing_time.strftime("%H:%M")}')
+                            f'{today_schedule.closing_time.strftime("%H:%M")}'
+                        )
         return 'Закрыто'
 
 
