@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from rest_framework.serializers import FloatField, ModelSerializer
+from rest_framework.serializers import ModelSerializer
 
 from carwash.models import (
     CarWashImageModel, CarWashModel, CarWashServicesModel,
@@ -103,7 +103,7 @@ class CarWashCardSerializer(ModelSerializer):
     Сериализатор GET для карточки мойки
     """
     type = CarWashTypeSerializer()
-    rating = FloatField(read_only=True)
+    rating = serializers.FloatField(read_only=True)
     services = serializers.SerializerMethodField()
     contacts = serializers.SerializerMethodField()
     metro = CarWashMetroSerializer(
