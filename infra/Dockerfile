@@ -1,4 +1,4 @@
-FROM python:3.10-slim as builder
+FROM python:3.11-slim as builder
 
 RUN apt-get update && apt-get install -y \
     python3-dev \
@@ -13,7 +13,7 @@ COPY ../pyproject.toml poetry.lock ./
 RUN poetry install
 
 
-FROM python:3.10-slim
+FROM python:3.11-slim
 
 ENV POETRY_VIRTUALENVS_IN_PROJECT=false
 
