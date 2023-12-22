@@ -65,10 +65,8 @@ jobs:
           script: |
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/car-wash-backend
             docker compose stop
-            docker compose rm web
-            rm .env
-            touch .env
-            echo DJANGO_SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }} >> .env
+            docker compose rm backend
+            echo DJANGO_SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }} > .env
             echo POSTGRES_DB=${{ secrets.POSTGRES_DB }} >> .env
             echo POSTGRES_USER=${{ secrets.POSTGRES_USER }} >> .env
             echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .env
