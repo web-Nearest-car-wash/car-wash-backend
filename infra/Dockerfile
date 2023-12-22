@@ -2,10 +2,6 @@ FROM python:3.10-slim as builder
 
 RUN apt-get update && apt-get install -y \
     python3-dev \
-    gcc \
-    libc-dev \
-    libffi-dev \
-    libpq-dev \
     curl
 
 RUN pip install poetry==1.5.1

@@ -46,7 +46,8 @@ jobs:
       - name: Push Backend to Docker Hub
         uses: docker/build-push-action@v2
         with:
-          context: ./infra
+          context: .
+          file: infra/Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/car-wash-backend:latest
 
