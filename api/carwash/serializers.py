@@ -160,7 +160,7 @@ class CarWashCardSerializer(ModelSerializer):
 class CarWashSerializer(ModelSerializer):
     """Сериализатор для вывода моек на главной странице"""
     type = CarWashTypeSerializer()
-    rating = FloatField(read_only=True)
+    rating = serializers.FloatField(read_only=True)
 
     class Meta:
         fields = ('id', 'type', 'name', 'rating',
