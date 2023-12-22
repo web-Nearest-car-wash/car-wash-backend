@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.utils import timezone
 from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
@@ -85,15 +86,15 @@ class CarWashScheduleSerializer(ModelSerializer):
     def get_open_until(obj):
         current_day_of_week = timezone.now().weekday()
         current_time = timezone.now().time()
-        today_schedule = obj.filter(day_of_week=current_day_of_week).first()
-        if today_schedule:
-            if today_schedule.around_the_clock:
-                return 'Круглосуточно'
-            if today_schedule.opening_time and today_schedule.closing_time:
-                if current_time < today_schedule.closing_time:
-                    return ('Работает до '
-                            f'{today_schedule.closing_time.strftime("%H:%M")}')
-            return 'Нет сведений'
+        today_schedule = obj.filter(
+            Q(day_of_week=current_day_of_week) | Q(around_the_clock=True)
+        ).first()
+        if today_schedule.around_the_clock:
+            return 'Круглосуточно'
+        if today_schedule.opening_time and today_schedule.closing_time:
+            if current_time < today_schedule.closing_time:
+                return ('Работает до '
+                        f'{today_schedule.closing_time.strftime("%H:%M")}')
         return 'Закрыто'
 
 
