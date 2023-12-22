@@ -93,6 +93,7 @@ class CarWashScheduleSerializer(ModelSerializer):
                 if current_time < today_schedule.closing_time:
                     return ('Работает до '
                             f'{today_schedule.closing_time.strftime("%H:%M")}')
+            return 'Нет сведений'
         return 'Закрыто'
 
 
@@ -181,13 +182,12 @@ class CarWashSerializer(CarWashCardSerializer):
     """Сериализатор для вывода моек на главной странице."""
 
     open_until = serializers.SerializerMethodField()
-    address = serializers.SerializerMethodField()
 
     class Meta:
         fields = (
             'id',
             'image',
-            'address',
+            'contacts',
             'metro',
             'name',
             'rating',
@@ -204,7 +204,3 @@ class CarWashSerializer(CarWashCardSerializer):
             serializer = CarWashScheduleSerializer(queryset)
             return serializer.get_open_until(queryset)
         return None
-
-    @staticmethod
-    def get_address(obj):
-        return obj.contactsmodel.address
