@@ -15,9 +15,14 @@ from services.models import ServicesModel
 class CarWashFilter(FilterSet):
     """Фильтрация моек по местоположению, типу и услугам"""
 
+    is_around_the_clock = BooleanFilter(
+        method='filter_is_around_the_clock',
+        label='Круглосуточный режим работы'
+    )
+
     is_open = BooleanFilter(
         method='filter_is_open',
-        label='Статус автомойки в текущий момент: открыто/закрыто'
+        label='Автомойка открыта на данный момент'
         )
 
     latitude = NumberFilter(
@@ -34,13 +39,13 @@ class CarWashFilter(FilterSet):
         field_name='service__name',
         to_field_name='name',
         lookup_expr='icontains',
-        label='Выберите услугу'
+        label='Услуга'
     )
 
     type = CharFilter(
         field_name='type__name',
         lookup_expr='istartswith',
-        label='Выберите тип автомойки'
+        label='Тип автомойки'
     )
 
     class Meta:
@@ -74,4 +79,15 @@ class CarWashFilter(FilterSet):
         ).values_list('carwash')
         if value:
             return queryset.filter(id__in=open_carwashes)
+        return queryset
+
+    def filter_is_around_the_clock(self, queryset, name, value):
+        """Фильтрация по круглосуточному режиму работы"""
+        day_of_week = datetime.now().weekday()
+        around_the_clock_carwashes = ScheduleModel.objects.filter(
+            day_of_week=day_of_week,
+            around_the_clock=True
+        ).values_list('carwash')
+        if value:
+            return queryset.filter(id__in=around_the_clock_carwashes)
         return queryset
