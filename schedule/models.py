@@ -16,6 +16,8 @@ class ScheduleModel(models.Model):
     day_of_week = models.IntegerField(
         verbose_name='День недели',
         choices=DAYS_OF_WEEK,
+        blank=True,
+        null=True,
     )
     opening_time = models.TimeField(
         verbose_name='Время открытия',

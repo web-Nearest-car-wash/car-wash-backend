@@ -7,7 +7,9 @@ class ServicesModel(models.Model):
     name = models.CharField(
         db_index=True,
         verbose_name='Название услуги',
-        max_length=200
+        max_length=200,
+        unique=True,
+        help_text='Название услуги'
     )
     description = models.TextField(verbose_name='Описание услуги')
 
@@ -17,4 +19,4 @@ class ServicesModel(models.Model):
         verbose_name_plural = 'Услуги'
 
     def __str__(self):
-        return {self.name}
+        return f'{self.name}'

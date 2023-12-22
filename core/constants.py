@@ -1,32 +1,48 @@
 from drf_spectacular.utils import extend_schema
 
+PAYMENT_CHOICES = (
+    ('cash', 'Наличные'),
+    ('card', 'Картой'),
+    ('online', 'Онлайн'),
+    ('SBP', 'СБП'),
+)
 
 DAYS_OF_WEEK = [
-    (1, 'Понедельник'),
-    (2, 'Вторник'),
-    (3, 'Среда'),
-    (4, 'Четверг'),
-    (5, 'Пятница'),
-    (6, 'Суббота'),
-    (7, 'Воскресенье'),
+    (0, 'Понедельник'),
+    (1, 'Вторник'),
+    (2, 'Среда'),
+    (3, 'Четверг'),
+    (4, 'Пятница'),
+    (5, 'Суббота'),
+    (6, 'Воскресенье'),
 ]
 
 SCORES = ((1, 1), (2, 2), (3, 3), (4, 4), (5, 5))
 
 USERS_API_SCHEMA_EXTENSIONS = {
-    'list': extend_schema(summary="Получить список пользователей"),
-    'update': extend_schema(summary="Изменения данных о пользователе"),
+    'list': extend_schema(
+        tags=['Users'], summary="Получить список пользователей"),
+    'update': extend_schema(
+        tags=['Users'], summary="Изменения данных о пользователе"),
     'partial_update': extend_schema(
+        tags=['Users'],
         summary="Частичное изменение данных о пользователе",
         description="Изменения данных о пользователе. Поля, "
                     "которые не заполнены будут оставлены без изменений."
     ),
-    'create': extend_schema(summary="Создать нового пользователя"),
-    'destroy': extend_schema(summary="Удалить пользователя"),
-    'retrieve': extend_schema(summary="Получить данные о пользователе")
+    'create': extend_schema(
+        tags=['Users'], summary="Создать нового пользователя"),
+    'destroy': extend_schema(
+        tags=['Users'], summary="Удалить пользователя"),
+    'retrieve': extend_schema(
+        tags=['Users'], summary="Получить данные о пользователе")
 }
 
 CARWASH_API_SCHEMA_EXTENSIONS = {
-    'list': extend_schema(summary="Получить список автомоек"),
-    'retrieve': extend_schema(summary="Получить данные для карточки мойки")
+    'list': extend_schema(
+        tags=['CarWash'],
+        summary="Получить список автомоек"),
+    'retrieve': extend_schema(
+        tags=['CarWash'],
+        summary="Получить данные для карточки мойки")
 }

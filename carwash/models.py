@@ -1,7 +1,8 @@
-from django.core.validators import RegexValidator
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
+from multiselectfield import MultiSelectField
 
-from core.constants import SCORES
+from core.constants import PAYMENT_CHOICES, SCORES
 from services.models import ServicesModel
 from users.models import User
 
@@ -23,29 +24,25 @@ class MetroStationModel(models.Model):
     """Модель станции метро."""
     name = models.CharField(verbose_name='Название', null=False, blank=False,
                             max_length=200)
-    latitude = models.CharField(
+    latitude = models.DecimalField(
         verbose_name='Широта',
         blank=False, null=False,
-        max_length=13,
+        max_digits=8,
+        decimal_places=6,
         validators=[
-            RegexValidator(
-                regex='^-?([0-8]?[0-9]|90)(\.[0-9]{1,10})$',
-                message='Неверное указание широты, '
-                        'должно быть вида 55.752378',
-            ),
+            MinValueValidator(-90),
+            MaxValueValidator(90)
         ]
     )
-    longitude = models.CharField(
+    longitude = models.DecimalField(
         verbose_name='Долгота',
         blank=False,
         null=False,
-        max_length=14,
+        max_digits=9,
+        decimal_places=6,
         validators=[
-            RegexValidator(
-                regex='^-?([0-9]{1,2}|1[0-7][0-9]|180)(\.[0-9]{1,10})$',
-                message='Неверное указание долготы, '
-                        'должно быть вида 55.752378',
-            ),
+            MinValueValidator(-180),
+            MaxValueValidator(180)
         ]
     )
 
@@ -65,31 +62,27 @@ class CarWashModel(models.Model):
     """Модель автомойки."""
     name = models.CharField(verbose_name='Название', null=False, blank=False,
                             max_length=200)
-    latitude = models.CharField(
+    latitude = models.DecimalField(
         verbose_name='Широта',
         blank=False, null=False,
-        max_length=13,
+        max_digits=8,
+        decimal_places=6,
         default='55.7520233',
         validators=[
-            RegexValidator(
-                regex='^-?([0-8]?[0-9]|90)(\.[0-9]{1,10})$',
-                message='Неверное указание широты, '
-                        'должно быть вида 55.752378',
-            ),
+            MinValueValidator(-90),
+            MaxValueValidator(90)
         ]
     )
-    longitude = models.CharField(
+    longitude = models.DecimalField(
         verbose_name='Долгота',
         blank=False,
         null=False,
-        max_length=14,
+        max_digits=9,
+        decimal_places=6,
         default='37.6174994',
         validators=[
-            RegexValidator(
-                regex='^-?([0-9]{1,2}|1[0-7][0-9]|180)(\.[0-9]{1,10})$',
-                message='Неверное указание долготы, '
-                        'должно быть вида 55.752378',
-            ),
+            MinValueValidator(-180),
+            MaxValueValidator(180)
         ]
     )
     legal_person = models.BooleanField(
@@ -109,6 +102,20 @@ class CarWashModel(models.Model):
         ServicesModel,
         through='CarWashServicesModel',
         verbose_name='Оказываемые услуги'
+    )
+    rest_room = models.BooleanField(
+        verbose_name='Комната отдыха',
+        default=False,
+        help_text='Наличие комнаты отдыха'
+    )
+    payment = MultiSelectField(
+        verbose_name='Способ оплаты',
+        choices=PAYMENT_CHOICES,
+        max_choices=4,
+        null=True,
+        blank=True,
+        help_text='Выберите способ оплаты',
+        max_length=30
     )
     over_information = models.TextField(
         max_length=1000,
@@ -183,21 +190,7 @@ class CarWashServicesModel(models.Model):
         verbose_name_plural = 'Цены услуг'
 
     def __str__(self):
-        return f'{self.service}'
-
-
-class PromotionsModel(models.Model):
-    """Модель акции автомойки."""
-    carwash = models.ForeignKey(CarWashModel, verbose_name='Автомойка',
-                                on_delete=models.CASCADE)
-    text = models.TextField(max_length=1000)
-
-    class Meta:
-        verbose_name = 'Акция автомойки'
-        verbose_name_plural = 'Акции автомойки'
-
-    def __str__(self):
-        return f'{self.text[:150]}'
+        return f'{self.service.name}, {self.service.description}, {self.price}'
 
 
 class CarWashRatingModel(models.Model):
