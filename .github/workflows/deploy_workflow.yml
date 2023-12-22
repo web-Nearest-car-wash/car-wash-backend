@@ -24,7 +24,7 @@ jobs:
           virtualenvs-in-project: true
           installer-parallel: true
       - name: Poetry init
-        run: poetry shell
+        run: poetry --version
       - name: Install flake8
         run: poetry add flake8 pep8-naming flake8-broken-line flake8-return flake8-isort
       - name: Run flake8
