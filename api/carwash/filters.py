@@ -15,6 +15,10 @@ from services.models import ServicesModel
 class CarWashFilter(FilterSet):
     """Фильтрация моек по местоположению, типу и услугам"""
 
+    high_rating = BooleanFilter(
+        method='filter_high_rating',
+        label='Оценка 4+')
+
     is_around_the_clock = BooleanFilter(
         method='filter_is_around_the_clock',
         label='Круглосуточный режим работы'
@@ -90,4 +94,10 @@ class CarWashFilter(FilterSet):
         ).values_list('carwash')
         if value:
             return queryset.filter(id__in=around_the_clock_carwashes)
+        return queryset
+
+    def filter_high_rating(self, queryset, name, value):
+        """Фильтрация моек с высоким рейтингом"""
+        if value:
+            queryset = queryset.filter(rating__gte=4)
         return queryset
