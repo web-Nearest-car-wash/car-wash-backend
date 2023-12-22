@@ -27,7 +27,7 @@ build-backend = "poetry.core.masonry.api"
 
 
 [tool.taskipy.tasks]
-start = "gunicorn config.wsgi:application --bind"
+start = "gunicorn car_wash_backend.wsgi:application --bind"
 migrate = "python manage.py migrate"
 createsuperuser = "python manage.py createsuperuser"
 collectstatic = "python manage.py collectstatic --no-input"
