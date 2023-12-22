@@ -1,7 +1,8 @@
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
+from multiselectfield import MultiSelectField
 
-from core.constants import SCORES
+from core.constants import PAYMENT_CHOICES, SCORES
 from services.models import ServicesModel
 from users.models import User
 
@@ -102,6 +103,20 @@ class CarWashModel(models.Model):
         through='CarWashServicesModel',
         verbose_name='Оказываемые услуги'
     )
+    rest_room = models.BooleanField(
+        verbose_name='Комната отдыха',
+        default=False,
+        help_text='Наличие комнаты отдыха'
+    )
+    payment = MultiSelectField(
+        verbose_name='Способ оплаты',
+        choices=PAYMENT_CHOICES,
+        max_choices=4,
+        null=True,
+        blank=True,
+        help_text='Выберите способ оплаты',
+        max_length=30
+    )
     over_information = models.TextField(
         max_length=1000,
         verbose_name='Дополнительная информация',
@@ -175,21 +190,7 @@ class CarWashServicesModel(models.Model):
         verbose_name_plural = 'Цены услуг'
 
     def __str__(self):
-        return f'{self.service}'
-
-
-class PromotionsModel(models.Model):
-    """Модель акции автомойки."""
-    carwash = models.ForeignKey(CarWashModel, verbose_name='Автомойка',
-                                on_delete=models.CASCADE)
-    text = models.TextField(max_length=1000)
-
-    class Meta:
-        verbose_name = 'Акция автомойки'
-        verbose_name_plural = 'Акции автомойки'
-
-    def __str__(self):
-        return f'{self.text[:150]}'
+        return f'{self.service.name}, {self.service.description}, {self.price}'
 
 
 class CarWashRatingModel(models.Model):
