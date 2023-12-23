@@ -6,7 +6,7 @@ from .models import ContactsModel
 class ContactsAdmin(admin.ModelAdmin):
     """Класс админки контактов."""
 
-    list_display = ('carwash', 'address', 'phone', 'website')
+    list_display = ('carwash', 'address', 'email', 'phone', 'website')
     empty_value_display = '-пусто-'
 
 
