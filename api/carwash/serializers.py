@@ -3,10 +3,9 @@ from django.utils import timezone
 from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
 
-from carwash.models import (
-    CarWashImageModel, CarWashModel, CarWashServicesModel,
-    CarWashTypeModel, NearestMetroStationModel
-)
+from carwash.models import (CarWashImageModel, CarWashModel,
+                            CarWashServicesModel, CarWashTypeModel,
+                            NearestMetroStationModel)
 from contacts.models import ContactsModel
 from core.constants import DAYS_OF_WEEK, PAYMENT_CHOICES
 from promotions.models import PromotionsModel

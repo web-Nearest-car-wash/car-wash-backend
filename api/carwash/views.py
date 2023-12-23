@@ -5,8 +5,9 @@ from rest_framework.viewsets import ReadOnlyModelViewSet
 
 from carwash.models import CarWashModel
 from core.constants import CARWASH_API_SCHEMA_EXTENSIONS
+
 from .filters import CarWashFilter
-from .serializers import CarWashSerializer, CarWashCardSerializer
+from .serializers import CarWashCardSerializer, CarWashSerializer
 
 
 @extend_schema_view(**CARWASH_API_SCHEMA_EXTENSIONS)

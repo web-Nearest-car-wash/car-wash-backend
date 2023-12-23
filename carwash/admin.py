@@ -1,9 +1,9 @@
 from django.contrib import admin
 
 from carwash.models import (CarWashImageModel, CarWashModel,
-                            CarWashRatingModel,
-                            CarWashServicesModel, CarWashTypeModel,
-                            MetroStationModel, NearestMetroStationModel)
+                            CarWashRatingModel, CarWashServicesModel,
+                            CarWashTypeModel, MetroStationModel,
+                            NearestMetroStationModel)
 
 
 @admin.register(CarWashTypeModel)
