@@ -1,3 +1,5 @@
+from django.db.models import Q
+from django.utils import timezone
 from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
 
@@ -12,7 +14,8 @@ from schedule.models import ScheduleModel
 
 
 class CarWashTypeSerializer(ModelSerializer):
-    """Сериализатор для типа мойки"""
+    """Сериализатор для типа мойки."""
+
     class Meta:
         fields = ('name',)
         model = CarWashTypeModel
@@ -61,13 +64,15 @@ class CarWashScheduleSerializer(ModelSerializer):
     Сериализатор для расписания мойки
     """
     day_of_week = serializers.SerializerMethodField()
+    open_until = serializers.SerializerMethodField()
 
     class Meta:
         fields = (
             'day_of_week',
             'opening_time',
             'closing_time',
-            'around_the_clock'
+            'around_the_clock',
+            'open_until',
         )
         model = ScheduleModel
 
@@ -75,7 +80,22 @@ class CarWashScheduleSerializer(ModelSerializer):
     def get_day_of_week(obj):
         if obj.day_of_week is None:
             return None
-        return DAYS_OF_WEEK[obj.day_of_week - 1][1]
+        return DAYS_OF_WEEK[obj.day_of_week][1]
+
+    @staticmethod
+    def get_open_until(obj):
+        current_day_of_week = timezone.now().weekday()
+        current_time = timezone.now().time()
+        today_schedule = obj.filter(
+            Q(day_of_week=current_day_of_week) | Q(around_the_clock=True)
+        ).first()
+        if today_schedule.around_the_clock:
+            return 'Круглосуточно'
+        if today_schedule.opening_time and today_schedule.closing_time:
+            if current_time < today_schedule.closing_time:
+                return ('Работает до '
+                        f'{today_schedule.closing_time.strftime("%H:%M")}')
+        return 'Закрыто'
 
 
 class CarWashPromotionsSerializer(ModelSerializer):
@@ -159,13 +179,29 @@ class CarWashCardSerializer(ModelSerializer):
         return CarWashContactsSerializer(queryset).data
 
 
-class CarWashSerializer(ModelSerializer):
-    """Сериализатор для вывода моек на главной странице"""
-    type = CarWashTypeSerializer()
-    rating = serializers.FloatField(read_only=True)
+class CarWashSerializer(CarWashCardSerializer):
+    """Сериализатор для вывода моек на главной странице."""
+
+    open_until = serializers.SerializerMethodField()
 
     class Meta:
-        fields = ('id', 'type', 'name', 'rating',
-                  'latitude', 'longitude', 'loyalty',
-                  'over_information', 'metro', 'service')
+        fields = (
+            'id',
+            'image',
+            'contacts',
+            'metro',
+            'name',
+            'rating',
+            'latitude',
+            'longitude',
+            'open_until',
+        )
         model = CarWashModel
+
+    @staticmethod
+    def get_open_until(obj):
+        queryset = obj.schedules.all()
+        if queryset:
+            serializer = CarWashScheduleSerializer(queryset)
+            return serializer.get_open_until(queryset)
+        return None
