@@ -6,6 +6,7 @@ from carwash.models import (CarWashImageModel, CarWashModel,
                             NearestMetroStationModel)
 from schedule.admin import ScheduleInline
 
+
 @admin.register(CarWashTypeModel)
 class CarWashTypeModelAdmin(admin.ModelAdmin):
     list_display = ['id', 'name']
