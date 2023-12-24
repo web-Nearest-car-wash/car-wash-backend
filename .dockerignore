@@ -1,0 +1,7 @@
+.idea/
+.venv/
+static/
+media/
+infra/prod/
+*.sqlite3
+*.env
