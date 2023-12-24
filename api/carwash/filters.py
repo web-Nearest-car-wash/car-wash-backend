@@ -101,4 +101,5 @@ class CarWashFilter(FilterSet):
         """Фильтрация моек с высоким рейтингом"""
         if value:
             queryset = queryset.filter(rating__gte=4)
+            return queryset
         return queryset
