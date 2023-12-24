@@ -13,7 +13,8 @@ from services.models import ServicesModel
 
 
 class CarWashFilter(FilterSet):
-    """Фильтрация моек по местоположению, типу и услугам"""
+    """Фильтрация моек по местоположению, типу,
+    услугам, режиму работы и рейтингу"""
 
     high_rating = BooleanFilter(
         method='filter_high_rating',
@@ -42,7 +43,6 @@ class CarWashFilter(FilterSet):
         queryset=ServicesModel.objects.all(),
         field_name='service__name',
         to_field_name='name',
-        lookup_expr='icontains',
         label='Услуга'
     )
 
