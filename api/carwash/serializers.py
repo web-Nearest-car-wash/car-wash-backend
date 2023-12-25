@@ -7,7 +7,7 @@ from carwash.models import (CarWashImageModel, CarWashModel,
                             CarWashServicesModel, CarWashTypeModel,
                             NearestMetroStationModel)
 from contacts.models import ContactsModel
-from core.constants import DAYS_OF_WEEK, PAYMENT_CHOICES
+from core.constants import PAYMENT_CHOICES
 from promotions.models import PromotionsModel
 from schedule.models import ScheduleModel
 
