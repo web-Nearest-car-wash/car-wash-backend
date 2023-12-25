@@ -1,11 +1,15 @@
 from drf_spectacular.utils import extend_schema
 
-PAYMENT_CHOICES = (
-    ('cash', 'Наличные'),
-    ('card', 'Картой'),
-    ('online', 'Онлайн'),
-    ('SBP', 'СБП'),
-)
+CARWASH_API_SCHEMA_EXTENSIONS = {
+    'list': extend_schema(
+        tags=['CarWash'],
+        summary="Получить список автомоек"
+    ),
+    'retrieve': extend_schema(
+        tags=['CarWash'],
+        summary="Получить данные для карточки мойки"
+    )
+}
 
 DAYS_OF_WEEK = [
     (0, 'Понедельник'),
@@ -17,7 +21,16 @@ DAYS_OF_WEEK = [
     (6, 'Воскресенье'),
 ]
 
+SCHEDULE_HELP_TEXT = 'Введите время в формате ЧЧ:ММ, например 10:00'
+
 SCORES = ((1, 1), (2, 2), (3, 3), (4, 4), (5, 5))
+
+PAYMENT_CHOICES = (
+    ('cash', 'Наличные'),
+    ('card', 'Картой'),
+    ('online', 'Онлайн'),
+    ('SBP', 'СБП'),
+)
 
 USERS_API_SCHEMA_EXTENSIONS = {
     'list': extend_schema(
@@ -36,13 +49,4 @@ USERS_API_SCHEMA_EXTENSIONS = {
         tags=['Users'], summary="Удалить пользователя"),
     'retrieve': extend_schema(
         tags=['Users'], summary="Получить данные о пользователе")
-}
-
-CARWASH_API_SCHEMA_EXTENSIONS = {
-    'list': extend_schema(
-        tags=['CarWash'],
-        summary="Получить список автомоек"),
-    'retrieve': extend_schema(
-        tags=['CarWash'],
-        summary="Получить данные для карточки мойки")
 }

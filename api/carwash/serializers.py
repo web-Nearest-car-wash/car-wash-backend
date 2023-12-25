@@ -63,7 +63,7 @@ class CarWashScheduleSerializer(ModelSerializer):
     Сериализатор для расписания мойки
     """
     day_of_week = serializers.SerializerMethodField()
-    open_until = serializers.SerializerMethodField()
+    open_until = serializers.SerializerMethodField(required=False)
 
     class Meta:
         fields = (
@@ -77,9 +77,7 @@ class CarWashScheduleSerializer(ModelSerializer):
 
     @staticmethod
     def get_day_of_week(obj):
-        if obj.day_of_week is None:
-            return None
-        return DAYS_OF_WEEK[obj.day_of_week][1]
+        return obj.get_day_of_week()
 
     @staticmethod
     def get_open_until(obj):
@@ -88,7 +86,7 @@ class CarWashScheduleSerializer(ModelSerializer):
         today_schedule = obj.filter(
             Q(day_of_week=current_day_of_week) | Q(around_the_clock=True)
         ).first()
-        if today_schedule or None:
+        if today_schedule:
             if today_schedule.around_the_clock:
                 return 'Круглосуточно'
             if today_schedule.opening_time and today_schedule.closing_time:
