@@ -1,6 +1,7 @@
 from django.db.models import Avg
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import extend_schema_view
+from rest_framework import filters
 from rest_framework.permissions import AllowAny
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
@@ -19,23 +20,14 @@ class CarWashViewSet(ReadOnlyModelViewSet):
     Разрешены GET-запросы для получения списка автомоек
     и деталей конкретной автомойки.
     Доступно для любого пользователя.
-
-    Эндпоинты:
-    - /carwashes/ : GET-запрос возвращает список всех автомоек.
-    - /carwashes/{id}/ : GET-запрос возвращает детали автомойки по ее id.
-
-    Если в GET-запросе передана геопозиция пользователя (latitude, longitude):
-    - /carwashes/?latitude={latitude}&longitude={longitude} :
-    возвращает список автомоек в заданной области,
-    определяемой параметрами LAT_RANGE и LONG_RANGE,
-    в зависимости от геопозиции.
     """
 
     queryset = CarWashModel.objects.all().annotate(
         rating=Avg('carwashratingmodel__score'))
     serializer_class = CarWashSerializer
-    filter_backends = (DjangoFilterBackend,)
+    filter_backends = (DjangoFilterBackend, filters.OrderingFilter)
     filterset_class = CarWashFilter
+    ordering_fields = ('rating',)
     permission_classes = [AllowAny]
     http_method_names = ['get']
 
