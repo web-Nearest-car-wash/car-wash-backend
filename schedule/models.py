@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 
 from carwash.models import CarWashModel
@@ -5,7 +6,7 @@ from core.constants import DAYS_OF_WEEK
 
 
 class ScheduleModel(models.Model):
-    """Класс режима работы автомойки."""
+    """Модель режима работы автомойки."""
 
     carwash = models.ForeignKey(
         CarWashModel,
@@ -44,3 +45,17 @@ class ScheduleModel(models.Model):
             return 'Круглосуточно'
         return (f'{self.carwash}, режим работы: в {self.day_of_week} с '
                 f'{self.opening_time} до {self.closing_time}')
+
+    def clean(self):
+        super().clean()
+        if ScheduleModel.objects.filter(
+            carwash=self.carwash,
+            day_of_week=self.day_of_week
+        ).exclude(pk=self.pk).exists():
+            raise ValidationError(
+                f'Режим работы для "{DAYS_OF_WEEK[self.day_of_week][1]}" '
+                'уже задан.'
+            )
+        if self.opening_time >= self.closing_time:
+            raise ValidationError(
+                'Время начала должно быть раньше времени конца работы.')
