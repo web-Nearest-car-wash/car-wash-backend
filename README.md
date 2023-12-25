@@ -60,11 +60,6 @@ Redoc  [тут должна быть ссылка](https://example.ru/)
 
 ## Команда разработчиков:
 - [Андреева Анна](https://github.com/Anya-sl)
-- [Бескровный Борис](https://github.com/beskrovniibv)
 - [Пашкова Юлия](https://github.com/Jullitka)
 - [Сердюков Павел](https://github.com/PavelPrist)
 - [Федорович Александр](https://github.com/Aleksandr140590)
-
-
-=======
-

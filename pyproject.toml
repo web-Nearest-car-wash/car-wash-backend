@@ -16,8 +16,21 @@ python-dotenv = "^1.0.0"
 djoser = "^2.2.2"
 djangorestframework-simplejwt = "^5.3.1"
 django-phonenumber-field = {extras = ["phonenumbers"], version = "^7.2.0"}
+gunicorn = "^21.2.0"
+taskipy = "^1.12.2"
+psycopg2-binary = "^2.9.9"
+django-multiselectfield = "^0.1.12"
+flake8 = "^6.1.0"
+
 
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+
+[tool.taskipy.tasks]
+start = "gunicorn car_wash_backend.wsgi:application --bind"
+migrate = "python manage.py migrate"
+createsuperuser = "python manage.py createsuperuser"
+collectstatic = "python manage.py collectstatic --no-input"
