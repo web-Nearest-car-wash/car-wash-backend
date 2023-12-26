@@ -1,12 +1,11 @@
-from django.core.exceptions import ValidationError
 from django.db import models
 
 from carwash.models import CarWashModel
-from core.constants import DAYS_OF_WEEK, SCHEDULE_HELP_TEXT
+from core.constants import AROUND_THE_CLOCK, DAYS_OF_WEEK, SCHEDULE_HELP_TEXT
 
 
 class ScheduleModel(models.Model):
-    """Модель режима работы автомойки."""
+    """Класс режима работы автомойки."""
 
     carwash = models.ForeignKey(
         CarWashModel,
@@ -49,7 +48,7 @@ class ScheduleModel(models.Model):
 
     def __str__(self):
         if self.around_the_clock:
-            return 'Круглосуточно'
+            return AROUND_THE_CLOCK
         return (
             f'{self.carwash}, режим работы в "{self.get_day_of_week()}" с '
             f'{self.opening_time} до {self.closing_time}'

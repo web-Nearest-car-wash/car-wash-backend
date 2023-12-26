@@ -8,7 +8,9 @@ from carwash.models import (CarWashImageModel, CarWashModel,
                             CarWashServicesModel, CarWashTypeModel,
                             NearestMetroStationModel)
 from contacts.models import ContactsModel
-from core.constants import PAYMENT_CHOICES, TIME_UTC_CORRECTION
+from core.constants import (AROUND_THE_CLOCK, CLOSED, NO_INFORMATION,
+                            PAYMENT_CHOICES, TIME_UTC_CORRECTION,
+                            WORKS_UNTIL)
 from promotions.models import PromotionsModel
 from schedule.models import ScheduleModel
 
@@ -87,21 +89,20 @@ class CarWashScheduleSerializer(ModelSerializer):
         today_schedule = obj.filter(
             Q(day_of_week=current_day_of_week) | Q(around_the_clock=True)
         ).first()
-        print(today_schedule)
         if today_schedule:
             if today_schedule.around_the_clock:
-                return 'Круглосуточно'
+                return AROUND_THE_CLOCK
             if today_schedule.opening_time and today_schedule.closing_time:
                 if current_time.time() < today_schedule.closing_time:
-                    return ('Работает до '
+                    return (f'{WORKS_UNTIL}'
                             f'{today_schedule.closing_time.strftime("%H:%M")}')
-            return 'Закрыто'
-        return 'Нет сведений.'
+            return CLOSED
+        return NO_INFORMATION
 
 
 class CarWashPromotionsSerializer(ModelSerializer):
     """
-    Сериализатор для акции мойки
+    Сериализатор для акций мойки
     """
 
     class Meta:
@@ -188,7 +189,7 @@ class CarWashCardSerializer(ModelSerializer):
 class CarWashSerializer(CarWashCardSerializer):
     """Сериализатор для вывода моек на главной странице."""
 
-    open_until = serializers.SerializerMethodField()
+    open_until_list = serializers.SerializerMethodField()
 
     class Meta:
         fields = (
@@ -200,12 +201,12 @@ class CarWashSerializer(CarWashCardSerializer):
             'rating',
             'latitude',
             'longitude',
-            'open_until',
+            'open_until_list',
         )
         model = CarWashModel
 
     @staticmethod
-    def get_open_until(obj):
+    def get_open_until_list(obj):
         queryset = obj.schedules.all()
         if queryset:
             serializer = CarWashScheduleSerializer(queryset)

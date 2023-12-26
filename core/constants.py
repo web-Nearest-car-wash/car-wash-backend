@@ -2,16 +2,10 @@ import datetime as dt
 
 from drf_spectacular.utils import extend_schema
 
-CARWASH_API_SCHEMA_EXTENSIONS = {
-    'list': extend_schema(
-        tags=['CarWash'],
-        summary="Получить список автомоек"
-    ),
-    'retrieve': extend_schema(
-        tags=['CarWash'],
-        summary="Получить данные для карточки мойки"
-    )
-}
+AROUND_THE_CLOCK = 'Круглосуточно'
+CLOSED = 'Закрыто'
+NO_INFORMATION = 'Нет информации'
+WORKS_UNTIL = 'Работает до '
 
 DAYS_OF_WEEK = [
     (0, 'Понедельник'),
@@ -53,4 +47,13 @@ USERS_API_SCHEMA_EXTENSIONS = {
         tags=['Users'], summary="Удалить пользователя"),
     'retrieve': extend_schema(
         tags=['Users'], summary="Получить данные о пользователе")
+}
+
+CARWASH_API_SCHEMA_EXTENSIONS = {
+    'list': extend_schema(
+        tags=['CarWash'],
+        summary="Получить список автомоек"),
+    'retrieve': extend_schema(
+        tags=['CarWash'],
+        summary="Получить данные для карточки мойки")
 }
