@@ -1,3 +1,5 @@
+import datetime as dt
+
 from drf_spectacular.utils import extend_schema
 
 CARWASH_API_SCHEMA_EXTENSIONS = {
@@ -31,6 +33,8 @@ PAYMENT_CHOICES = (
     ('online', 'Онлайн'),
     ('SBP', 'СБП'),
 )
+
+TIME_UTC_CORRECTION = dt.timedelta(hours=3)
 
 USERS_API_SCHEMA_EXTENSIONS = {
     'list': extend_schema(
