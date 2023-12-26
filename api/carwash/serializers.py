@@ -7,7 +7,8 @@ from carwash.models import (CarWashImageModel, CarWashModel,
                             CarWashServicesModel, CarWashTypeModel,
                             NearestMetroStationModel)
 from contacts.models import ContactsModel
-from core.constants import DAYS_OF_WEEK, PAYMENT_CHOICES
+from core.constants import (AROUND_THE_CLOCK, CLOSED, DAYS_OF_WEEK,
+                            NO_INFORMATION, PAYMENT_CHOICES, WORKS_UNTIL)
 from promotions.models import PromotionsModel
 from schedule.models import ScheduleModel
 
@@ -90,13 +91,13 @@ class CarWashScheduleSerializer(ModelSerializer):
         ).first()
         if today_schedule or None:
             if today_schedule.around_the_clock:
-                return 'Круглосуточно'
+                return AROUND_THE_CLOCK
             if today_schedule.opening_time and today_schedule.closing_time:
                 if current_time < today_schedule.closing_time:
-                    return ('Работает до '
+                    return (f'{WORKS_UNTIL}'
                             f'{today_schedule.closing_time.strftime("%H:%M")}')
-            return 'Закрыто'
-        return 'Нет сведений.'
+            return CLOSED
+        return NO_INFORMATION
 
 
 class CarWashPromotionsSerializer(ModelSerializer):

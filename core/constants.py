@@ -1,5 +1,10 @@
 from drf_spectacular.utils import extend_schema
 
+AROUND_THE_CLOCK = 'Круглосуточно'
+CLOSED = 'Закрыто'
+NO_INFORMATION = 'Нет информации'
+WORKS_UNTIL = 'Работает до '
+
 PAYMENT_CHOICES = (
     ('cash', 'Наличные'),
     ('card', 'Картой'),
