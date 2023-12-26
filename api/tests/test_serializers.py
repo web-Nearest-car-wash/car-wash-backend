@@ -6,20 +6,6 @@ from carwash.models import CarWashModel, CarWashTypeModel
 from schedule.models import ScheduleModel
 
 
-# class TestCarWashSerializer(unittest.TestCase):
-#     def test_get_open_until(self):
-#         # Create a mock CarWashModel object
-#         car_wash_model_mock = Mock()
-#         car_wash_model_mock.schedules.all.return_value = [Mock(open_until='10:00 PM')]  # Replace 'open_until' with the actual attribute name
-#
-#         # Create an instance of CarWashSerializer
-#         serializer = CarWashSerializer()
-#
-#         # Call the get_open_until method and assert the result
-#         result = serializer.get_open_until(car_wash_model_mock)
-#         self.assertEqual(result, '10:00 PM')  # Replace '10:00 PM' with the expected result
-#
-
 class TestCarWashSerializer(unittest.TestCase):
 
     def setUp(self):
