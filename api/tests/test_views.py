@@ -1,8 +1,9 @@
 import unittest
+
 from rest_framework.test import APIRequestFactory, APITestCase
 
-from carwash.models import CarWashModel, CarWashTypeModel
 from api.carwash.views import CarWashViewSet
+from carwash.models import CarWashModel, CarWashTypeModel
 
 
 class TestCarWashAPIViewSet(APITestCase):
