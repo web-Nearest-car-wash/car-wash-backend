@@ -23,6 +23,9 @@ class TestCarWashAPIViewSet(APITestCase):
             payment='cash',
         )
 
+    def tearDown(self):
+        self.carwash.delete()
+
     def test_get_carwashes_list(self):
         request = self.factory.get('/carwashes/')
         response = self.view(request)
