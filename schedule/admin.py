@@ -2,7 +2,6 @@ from django.contrib import admin
 
 from .models import ScheduleModel
 
-
 # class ScheduleAdmin(admin.ModelAdmin):
 #     """Класс админки расписания."""
 
