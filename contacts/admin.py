@@ -3,7 +3,7 @@ from django.contrib import admin
 from .models import ContactsModel
 
 
-class ContactsAdmin(admin.TabularInline):
+class ContactsInline(admin.TabularInline):
     """Класс админки контактов."""
 
     model = ContactsModel

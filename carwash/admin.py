@@ -4,7 +4,7 @@ from carwash.models import (CarWashImageModel, CarWashModel,
                             CarWashRatingModel, CarWashServicesModel,
                             CarWashTypeModel, MetroStationModel,
                             NearestMetroStationModel)
-from contacts.admin import ContactsAdmin
+from contacts.admin import ContactsInline
 from schedule.admin import ScheduleInline
 
 
@@ -16,7 +16,7 @@ class CarWashTypeModelAdmin(admin.ModelAdmin):
 @admin.register(CarWashModel)
 class CarWashModelAdmin(admin.ModelAdmin):
     list_display = ['id', 'name', 'latitude', 'longitude', 'type', ]
-    inlines = [ContactsAdmin, ScheduleInline]
+    inlines = [ContactsInline, ScheduleInline]
 
 
 @admin.register(CarWashServicesModel)
