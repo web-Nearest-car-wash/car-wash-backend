@@ -46,7 +46,7 @@ class TestCarWashSerializer(unittest.TestCase):
             'rating',
             'latitude',
             'longitude',
-            'open_until',
+            'open_until_list',
         )
         self.assertEqual(self.serializer.Meta.fields, expected_fields)
 
@@ -57,7 +57,7 @@ class TestCarWashSerializer(unittest.TestCase):
     def test_get_open_until_with_schedules(self):
         serializer = CarWashSerializer(self.carwash)
         self.assertEqual(
-            serializer.data['open_until'],
+            serializer.data['open_until_list'],
             f'Работает до {self.schedule.closing_time}'
         )
 
