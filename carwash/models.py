@@ -92,7 +92,8 @@ class CarWashModel(models.Model):
     loyalty = models.TextField(verbose_name="Лояльность", null=True,
                                blank=True, max_length=500)
 
-    type = models.ManyToManyField(CarWashTypeModel, verbose_name='Тип автомойки')
+    type = models.ManyToManyField(CarWashTypeModel,
+                                  verbose_name='Тип автомойки')
     service = models.ManyToManyField(
         ServicesModel,
         through='CarWashServicesModel',
