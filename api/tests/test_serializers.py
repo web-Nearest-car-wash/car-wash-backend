@@ -82,6 +82,11 @@ class TestCarWashCardSerializer(TestCarWashSerializer):
             avatar=True,
         )
 
+    def tearDown(self):
+        self.carwash.delete()
+        self.type_.delete()
+        self.schedule.delete()
+
     def test_fields(self):
         """Проверка полей сериализатора."""
         expected_fields = (
