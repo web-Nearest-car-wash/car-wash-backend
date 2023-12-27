@@ -1,16 +1,11 @@
+import datetime as dt
+
 from drf_spectacular.utils import extend_schema
 
 AROUND_THE_CLOCK = 'Круглосуточно'
 CLOSED = 'Закрыто'
 NO_INFORMATION = 'Нет информации'
 WORKS_UNTIL = 'Работает до '
-
-PAYMENT_CHOICES = (
-    ('cash', 'Наличные'),
-    ('card', 'Картой'),
-    ('online', 'Онлайн'),
-    ('SBP', 'СБП'),
-)
 
 DAYS_OF_WEEK = [
     (0, 'Понедельник'),
@@ -22,7 +17,18 @@ DAYS_OF_WEEK = [
     (6, 'Воскресенье'),
 ]
 
+SCHEDULE_HELP_TEXT = 'Введите время в формате ЧЧ:ММ, например 10:00'
+
 SCORES = ((1, 1), (2, 2), (3, 3), (4, 4), (5, 5))
+
+PAYMENT_CHOICES = (
+    ('cash', 'Наличные'),
+    ('card', 'Картой'),
+    ('online', 'Онлайн'),
+    ('SBP', 'СБП'),
+)
+
+TIME_UTC_CORRECTION = dt.timedelta(hours=3)
 
 USERS_API_SCHEMA_EXTENSIONS = {
     'list': extend_schema(
