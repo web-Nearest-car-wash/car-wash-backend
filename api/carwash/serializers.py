@@ -9,8 +9,7 @@ from carwash.models import (CarWashImageModel, CarWashModel,
                             NearestMetroStationModel)
 from contacts.models import ContactsModel
 from core.constants import (AROUND_THE_CLOCK, CLOSED, NO_INFORMATION,
-                            PAYMENT_CHOICES, TIME_UTC_CORRECTION,
-                            WORKS_UNTIL)
+                            PAYMENT_CHOICES, TIME_UTC_CORRECTION, WORKS_UNTIL)
 from promotions.models import PromotionsModel
 from schedule.models import ScheduleModel
 
