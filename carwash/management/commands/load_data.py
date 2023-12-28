@@ -3,8 +3,8 @@ from datetime import datetime
 
 from django.core.management import BaseCommand
 
-from carwash.models import (CarWashServicesModel, CarWashTypeModel,
-                            CarWashModel, MetroStationModel)
+from carwash.models import (CarWashModel, CarWashServicesModel,
+                            CarWashTypeModel, MetroStationModel)
 from contacts.models import ContactsModel
 from schedule.models import ScheduleModel
 from services.models import ServicesModel
