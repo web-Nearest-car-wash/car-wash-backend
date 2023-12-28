@@ -2,8 +2,7 @@ from django.contrib import admin
 
 from carwash.models import (CarWashImageModel, CarWashModel,
                             CarWashRatingModel, CarWashServicesModel,
-                            CarWashTypeModel, MetroStationModel,
-                            NearestMetroStationModel)
+                            CarWashTypeModel, MetroStationModel)
 from contacts.admin import ContactsInline
 from schedule.admin import ScheduleInline
 
@@ -15,18 +14,13 @@ class CarWashTypeModelAdmin(admin.ModelAdmin):
 
 @admin.register(CarWashModel)
 class CarWashModelAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name', 'latitude', 'longitude', 'type', ]
+    list_display = ['id', 'name', 'latitude', 'longitude', ]
     inlines = [ContactsInline, ScheduleInline]
 
 
 @admin.register(CarWashServicesModel)
 class CarWashServiceModelAdmin(admin.ModelAdmin):
     list_display = ['carwash', 'service', 'price']
-
-
-@admin.register(NearestMetroStationModel)
-class NearestMetroStationModelAdmin(admin.ModelAdmin):
-    list_display = ['carwash', 'metro_station', 'distance']
 
 
 @admin.register(MetroStationModel)

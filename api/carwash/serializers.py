@@ -6,7 +6,7 @@ from rest_framework.serializers import ModelSerializer
 
 from carwash.models import (CarWashImageModel, CarWashModel,
                             CarWashServicesModel, CarWashTypeModel,
-                            NearestMetroStationModel)
+                            MetroStationModel)
 from contacts.models import ContactsModel
 from core.constants import (AROUND_THE_CLOCK, CLOSED, NO_INFORMATION,
                             PAYMENT_CHOICES, TIME_UTC_CORRECTION, WORKS_UNTIL)
@@ -53,11 +53,11 @@ class CarWashMetroSerializer(ModelSerializer):
     Сериализатор для метро мойки
     """
     name = serializers.CharField(source='metro_station.name')
-    distance = serializers.IntegerField()
+    # distance = serializers.IntegerField()
 
     class Meta:
-        fields = ('name', 'distance')
-        model = NearestMetroStationModel
+        fields = ('name',)
+        model = MetroStationModel
 
 
 class CarWashScheduleSerializer(ModelSerializer):
