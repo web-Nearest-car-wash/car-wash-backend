@@ -16,6 +16,7 @@ payment_metods = {
     "SBP": ["СБП", "QR-код", "sms-платеж"]
 }
 
+
 class Command(BaseCommand):
     help = "Loads data from json"
 
