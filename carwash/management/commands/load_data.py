@@ -3,7 +3,8 @@ from datetime import datetime
 
 from django.core.management import BaseCommand
 
-from carwash.models import CarWashTypeModel, MetroStationModel, CarWashModel, CarWashServicesModel
+from carwash.models import (CarWashServicesModel, CarWashTypeModel,
+                            CarWashModel, MetroStationModel)
 from contacts.models import ContactsModel
 from schedule.models import ScheduleModel
 from services.models import ServicesModel
@@ -15,8 +16,6 @@ payment_metods = {
     "SBP": ["СБП", "QR-код", "sms-платеж"]
 }
 
-
-
 class Command(BaseCommand):
     help = "Loads data from json"
 
@@ -25,19 +24,12 @@ class Command(BaseCommand):
         with open("data/data_output.json") as f:
             json_data = json.load(f)
         print("opened")
-        carwashtypes = json_data.get("car_wash_type")
-        # for type in carwashtypes:
-        #     try:
-        #         type = CarWashTypeModel(
-        #             name=type["name"]
-        #         )
-        #         type.save()
-        #     except Exception:
-        #         continue
         metro_data = json_data.get("metro")
         for metro in metro_data:
             try:
-                if not MetroStationModel.objects.filter(name=metro["name"]).exists():
+                if not MetroStationModel.objects.filter(
+                        name=metro["name"]
+                ).exists():
                     metro = MetroStationModel(**metro)
                     metro.save()
             except Exception:
@@ -56,7 +48,9 @@ class Command(BaseCommand):
                 continue
             try:
                 for type in carwash_data["car_wash_type"]:
-                    carwash.type.add(CarWashTypeModel.objects.get_or_create(name=type["name"])[0])
+                    carwash.type.add(CarWashTypeModel.objects.get_or_create(
+                        name=type["name"])[0]
+                                     )
                     carwash.save()
             except Exception as err:
                 print(f'{err} type')
@@ -98,8 +92,12 @@ class Command(BaseCommand):
                     work_time = ScheduleModel(
                         carwash=carwash,
                         day_of_week=day_work_time["day_of_week"],
-                        opening_time=datetime.strptime(day_work_time["opening_time"], "%H:%M").time(),
-                        closing_time=datetime.strptime(day_work_time["closing_time"], "%H:%M").time()
+                        opening_time=datetime.strptime(
+                            day_work_time["opening_time"], "%H:%M"
+                        ).time(),
+                        closing_time=datetime.strptime(
+                            day_work_time["closing_time"], "%H:%M"
+                        ).time()
                     )
                     work_time.save()
             except Exception as err:
@@ -109,7 +107,9 @@ class Command(BaseCommand):
                 for service_data in carwash_data.get("services"):
                     service = CarWashServicesModel(
                         carwash=carwash,
-                        service=ServicesModel.objects.get_or_create(name=service_data["title"])[0],
+                        service=ServicesModel.objects.get_or_create(
+                            name=service_data["title"]
+                        )[0],
                         price=service_data["price"]
                     )
                     service.save()
