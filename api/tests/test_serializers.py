@@ -2,8 +2,13 @@ import unittest
 
 from django.utils import timezone
 
-from api.carwash.serializers import CarWashSerializer
+from api.carwash.serializers import (
+    CarWashContactsSerializer,
+    CarWashSerializer,
+    CarWashScheduleSerializer
+)
 from carwash.models import CarWashModel, CarWashTypeModel
+from contacts.models import ContactsModel
 from schedule.models import ScheduleModel
 
 
@@ -60,6 +65,52 @@ class TestCarWashSerializer(unittest.TestCase):
             serializer.data['open_until_list'],
             f'Работает до {self.schedule.closing_time}'
         )
+
+
+class TestCarWashScheduleSerializer(TestCarWashSerializer):
+    """Тесты сериалайзера расписания мойки."""
+
+    def setUp(self):
+        super().setUp()
+        self.serializer = CarWashScheduleSerializer()
+
+    def test_fields(self):
+        """Проверка полей сериализатора."""
+        expected_fields = (
+            'day_of_week',
+            'opening_time',
+            'closing_time',
+            'around_the_clock',
+            'open_until',
+        )
+        self.assertEqual(self.serializer.Meta.fields, expected_fields)
+
+
+class TestCarWashContactsSerializer(TestCarWashSerializer):
+    """Тесты сериалайзера контактов мойки."""
+
+    def setUp(self):
+        super().setUp()
+        self.serializer = CarWashContactsSerializer()
+        self.contacts = ContactsModel.objects.create(
+            carwash=self.carwash,
+            address='Ул. Тестовая, дом, корпус',
+            email='test@mail.ru',
+            phone='89217553535',
+            website='test_website.com',
+        )
+
+    def test_fields(self):
+        """Проверка полей сериализатора."""
+        expected_data = [
+            ['address', self.contacts.address],
+            ['phone', self.contacts.phone],
+            ['website', self.contacts.website],
+        ]
+        serialized_data = self.serializer.to_representation(self.contacts)
+        for field, data in expected_data:
+            with self.subTest(field=field):
+                self.assertEqual(serialized_data.get(field), data)
 
 
 if __name__ == '__main__':

@@ -21,6 +21,7 @@ taskipy = "^1.12.2"
 psycopg2-binary = "^2.9.9"
 django-multiselectfield = "^0.1.12"
 flake8 = "^6.1.0"
+coverage = "^7.4.0"
 
 
 
