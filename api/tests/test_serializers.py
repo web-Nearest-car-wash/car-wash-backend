@@ -2,8 +2,9 @@ import unittest
 
 from django.utils import timezone
 
-from api.carwash.serializers import CarWashSerializer
-from carwash.models import CarWashModel, CarWashTypeModel
+from api.carwash.serializers import CarWashCardSerializer, CarWashSerializer
+from carwash.models import CarWashModel, CarWashImageModel, CarWashTypeModel
+from contacts.models import ContactsModel
 from schedule.models import ScheduleModel
 
 
@@ -62,6 +63,58 @@ class TestCarWashSerializer(unittest.TestCase):
             serializer.data['open_until'],
             f'Работает до {self.schedule.closing_time}'
         )
+
+
+class TestCarWashCardSerializer(TestCarWashSerializer):
+    """Тесты сериалайзера карточки мойки."""
+
+    def setUp(self):
+        super().setUp()
+        self.serializer = CarWashCardSerializer()
+        self.contacts = ContactsModel.objects.create(
+            carwash=self.carwash,
+            address='Ул. Тестовая, дом, корпус',
+            email='test@mail.ru',
+            phone='89217553535',
+            website='test_website.com',
+        )
+        self.image = CarWashImageModel.objects.create(
+            carwash=self.carwash,
+            image="https://example.com/image.jpg",
+            avatar=True,
+        )
+
+    def tearDown(self):
+        self.carwash.delete()
+        self.type_.delete()
+        self.schedule.delete()
+
+    def test_fields(self):
+        """Проверка полей сериализатора."""
+        expected_fields = (
+            'id',
+            'image',
+            'contacts',
+            'legal_person',
+            'loyalty',
+            'metro',
+            'name',
+            'promotions',
+            'payment',
+            'rating',
+            'rest_room',
+            'schedule',
+            'services',
+            'type',
+            'latitude',
+            'longitude',
+            'over_information',
+        )
+        self.assertEqual(self.serializer.Meta.fields, expected_fields)
+
+    def test_model(self):
+        """Провека модели для сериалайзера."""
+        self.assertEqual(self.serializer.Meta.model, CarWashModel)
 
 
 if __name__ == '__main__':
