@@ -67,7 +67,7 @@ class CarWashModel(models.Model):
         blank=False, null=False,
         max_digits=8,
         decimal_places=6,
-        default='55.752023',
+        default='55.558741',
         validators=[
             MinValueValidator(-90),
             MaxValueValidator(90)
@@ -79,7 +79,7 @@ class CarWashModel(models.Model):
         null=False,
         max_digits=9,
         decimal_places=6,
-        default='37.617499',
+        default='37.378847',
         validators=[
             MinValueValidator(-180),
             MaxValueValidator(180)

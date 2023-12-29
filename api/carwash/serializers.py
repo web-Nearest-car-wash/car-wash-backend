@@ -87,14 +87,19 @@ class CarWashScheduleSerializer(ModelSerializer):
         current_time = timezone.now().time()
         today_schedule = obj.filter(
             Q(day_of_week=current_day_of_week) | Q(around_the_clock=True)
+        )
+        if today_schedule.exists():
+            today_schedule = obj.filter(
+            Q(day_of_week=current_day_of_week) | Q(around_the_clock=True)
         ).first()
-        if today_schedule.around_the_clock:
-            return 'Круглосуточно'
-        if today_schedule.opening_time and today_schedule.closing_time:
-            if current_time < today_schedule.closing_time:
-                return ('Работает до '
-                        f'{today_schedule.closing_time.strftime("%H:%M")}')
-        return 'Закрыто'
+            if today_schedule.around_the_clock:
+                return 'Круглосуточно'
+            if today_schedule.opening_time and today_schedule.closing_time:
+                if current_time < today_schedule.closing_time:
+                    return ('Работает до '
+                            f'{today_schedule.closing_time.strftime("%H:%M")}')
+            return 'Закрыто'
+        return None
 
 
 class CarWashPromotionsSerializer(ModelSerializer):

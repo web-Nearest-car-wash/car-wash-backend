@@ -1,4 +1,10 @@
+from decimal import Decimal
+
 from drf_spectacular.utils import extend_schema
+
+
+CENTER_MOSCOW_LATITUDE = Decimal(55.558741)
+CENTER_MOSCOW_LONGITUDE = Decimal(37.378847)
 
 PAYMENT_CHOICES = (
     ('cash', 'Наличные'),

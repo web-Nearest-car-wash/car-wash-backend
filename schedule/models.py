@@ -31,7 +31,7 @@ class ScheduleModel(models.Model):
     )
     around_the_clock = models.BooleanField(
         verbose_name='Круглосуточно',
-        default=False,
+        default=False
     )
 
     class Meta:
