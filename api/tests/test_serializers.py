@@ -83,7 +83,7 @@ class TestCarWashScheduleSerializer(TestCarWashSerializer):
             'opening_time',
             'closing_time',
             'around_the_clock',
-            'open_until',
+            'open_until_list',
         )
         self.assertEqual(self.serializer.Meta.fields, expected_fields)
 
