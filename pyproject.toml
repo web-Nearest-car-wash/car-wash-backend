@@ -21,6 +21,8 @@ taskipy = "^1.12.2"
 psycopg2-binary = "^2.9.9"
 django-multiselectfield = "^0.1.12"
 flake8 = "^6.1.0"
+pillow = "^10.1.0"
+django-cors-headers = "^4.3.1"
 
 
 

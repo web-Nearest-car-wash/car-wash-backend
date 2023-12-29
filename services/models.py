@@ -11,7 +11,8 @@ class ServicesModel(models.Model):
         unique=True,
         help_text='Название услуги'
     )
-    description = models.TextField(verbose_name='Описание услуги')
+    description = models.TextField(verbose_name='Описание услуги',
+                                   blank=True, null=True)
 
     class Meta:
         ordering = ('name',)

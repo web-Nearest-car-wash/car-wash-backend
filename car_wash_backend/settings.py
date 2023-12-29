@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'djoser',
     'django_filters',
     'drf_spectacular',
+    'corsheaders',
     'phonenumber_field',
     'multiselectfield',
     'users',
@@ -66,6 +67,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware'
 ]
 
 ROOT_URLCONF = 'car_wash_backend.urls'
@@ -211,3 +213,16 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:3000",
+# ]
+CORS_ORIGIN_ALLOW_ALL = True
+
+CSRF_COOKIE_SECURE = True
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost:3000',
+    'https://*.*',
+    'http://*.*',
+    'http://185.41.161.91/'
+]
