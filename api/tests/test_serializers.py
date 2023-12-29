@@ -2,7 +2,11 @@ import unittest
 
 from django.utils import timezone
 
-from api.carwash.serializers import CarWashCardSerializer, CarWashSerializer
+from api.carwash.serializers import (
+    CarWashContactsSerializer,
+    CarWashSerializer,
+    CarWashScheduleSerializer
+)
 from carwash.models import CarWashModel, CarWashImageModel, CarWashTypeModel
 from contacts.models import ContactsModel
 from schedule.models import ScheduleModel
@@ -65,6 +69,33 @@ class TestCarWashSerializer(unittest.TestCase):
         )
 
 
+class TestCarWashScheduleSerializer(TestCarWashSerializer):
+    """Тесты сериалайзера расписания мойки."""
+
+    def setUp(self):
+        super().setUp()
+        self.serializer = CarWashScheduleSerializer()
+
+    def test_fields(self):
+        """Проверка полей сериализатора."""
+        expected_fields = (
+            'day_of_week',
+            'opening_time',
+            'closing_time',
+            'around_the_clock',
+            'open_until_list',
+        )
+        self.assertEqual(self.serializer.Meta.fields, expected_fields)
+
+
+class TestCarWashContactsSerializer(TestCarWashSerializer):
+    """Тесты сериалайзера контактов мойки."""
+
+    def setUp(self):
+        super().setUp()
+        self.serializer = CarWashContactsSerializer()
+
+        
 class TestCarWashCardSerializer(TestCarWashSerializer):
     """Тесты сериалайзера карточки мойки."""
 
@@ -78,6 +109,18 @@ class TestCarWashCardSerializer(TestCarWashSerializer):
             phone='89217553535',
             website='test_website.com',
         )
+
+    def test_fields(self):
+        """Проверка полей сериализатора."""
+        expected_data = [
+            ['address', self.contacts.address],
+            ['phone', self.contacts.phone],
+            ['website', self.contacts.website],
+        ]
+        serialized_data = self.serializer.to_representation(self.contacts)
+        for field, data in expected_data:
+            with self.subTest(field=field):
+                self.assertEqual(serialized_data.get(field), data)
         self.image = CarWashImageModel.objects.create(
             carwash=self.carwash,
             image="https://example.com/image.jpg",
