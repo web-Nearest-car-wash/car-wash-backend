@@ -224,6 +224,7 @@ class CarWashSerializer(CarWashCardSerializer):
     """Сериализатор для вывода моек на главной странице."""
 
     open_until_list = serializers.SerializerMethodField()
+    metro = serializers.SerializerMethodField()
 
     class Meta:
         fields = (
@@ -238,6 +239,44 @@ class CarWashSerializer(CarWashCardSerializer):
             'open_until_list',
         )
         model = CarWashModel
+
+    @staticmethod
+    def get_metro(self, obj):
+        car_wash_longitude = obj.longitude
+        car_wash_latitude = obj.latitude
+
+        all_metro_stations = MetroStationModel.objects.all()
+
+        nearest_metro_station = None
+
+        min_distance = float('inf')
+
+        for metro_station in all_metro_stations:
+            metro_station_longitude = metro_station.longitude
+            metro_station_latitude = metro_station.latitude
+
+            lat1, lon1, lat2, lon2 = map(
+                radians,
+                [
+                    car_wash_latitude,
+                    car_wash_longitude,
+                    metro_station_latitude,
+                    metro_station_longitude
+                ]
+            )
+            dlon = lon2 - lon1
+            dlat = lat2 - lat1
+            a = sin(dlat / 2) ** 2 + cos(lat1) * cos(lat2) * sin(dlon / 2) ** 2
+            c = 2 * atan2(sqrt(a), sqrt(1 - a))
+            distance = 6371 * c
+            if distance < min_distance:
+                min_distance = distance
+                nearest_metro_station = metro_station
+            return {
+                'name': nearest_metro_station.name,
+                'latitude': nearest_metro_station.latitude,
+                'longitude': nearest_metro_station.longitude
+            }
 
     @staticmethod
     def get_open_until_list(obj):
