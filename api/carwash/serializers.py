@@ -1,4 +1,5 @@
 import datetime as dt
+from math import radians, sin, cos, sqrt, atan2
 
 from django.db.models import Q
 from rest_framework import serializers
@@ -53,7 +54,6 @@ class CarWashMetroSerializer(ModelSerializer):
     Сериализатор для метро мойки
     """
     name = serializers.CharField(source='metro_station.name')
-    # distance = serializers.IntegerField()
 
     class Meta:
         fields = ('name',)
@@ -127,9 +127,7 @@ class CarWashCardSerializer(ModelSerializer):
     rating = serializers.FloatField(read_only=True)
     services = serializers.SerializerMethodField()
     contacts = serializers.SerializerMethodField()
-    metro = CarWashMetroSerializer(
-        many=True, source='nearestmetrostationmodel_set'
-    )
+    metro = serializers.SerializerMethodField()
     schedule = serializers.SerializerMethodField()
     promotions = CarWashPromotionsSerializer(many=True, read_only=True)
     image = serializers.SerializerMethodField()
@@ -159,6 +157,43 @@ class CarWashCardSerializer(ModelSerializer):
             'over_information',
         )
         model = CarWashModel
+
+    def get_metro(self, obj):
+        car_wash_longitude = obj.longitude
+        car_wash_latitude = obj.latitude
+
+        all_metro_stations = MetroStationModel.objects.all()
+
+        nearest_metro_station = None
+
+        min_distance = float('inf')
+
+        for metro_station in all_metro_stations:
+            metro_station_longitude = metro_station.longitude
+            metro_station_latitude = metro_station.latitude
+
+            lat1, lon1, lat2, lon2 = map(
+                radians,
+                [
+                    car_wash_latitude,
+                    car_wash_longitude,
+                    metro_station_latitude,
+                    metro_station_longitude
+                ]
+            )
+            dlon = lon2 - lon1
+            dlat = lat2 - lat1
+            a = sin(dlat / 2) ** 2 + cos(lat1) * cos(lat2) * sin(dlon / 2) ** 2
+            c = 2 * atan2(sqrt(a), sqrt(1 - a))
+            distance = 6371 * c
+            if distance < min_distance:
+                min_distance = distance
+                nearest_metro_station = metro_station
+            return {
+                'name': nearest_metro_station.name,
+                'latitude': nearest_metro_station.latitude,
+                'longitude': nearest_metro_station.longitude
+            }
 
     @staticmethod
     def get_image(obj):
