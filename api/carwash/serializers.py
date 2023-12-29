@@ -1,5 +1,5 @@
 import datetime as dt
-from math import atan2, cos, radians, sin, sqrt
+from math import atan2, cos, sin, sqrt
 
 from django.db.models import Q
 from rest_framework import serializers
