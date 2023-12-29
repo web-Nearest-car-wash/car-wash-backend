@@ -11,7 +11,8 @@ class TestCarWashSerializer(unittest.TestCase):
 
     def setUp(self):
         self.serializer = CarWashSerializer()
-        self.type_ = CarWashTypeModel.objects.get_or_create(name='Test Type')[0]
+        self.type_ = CarWashTypeModel.objects.get_or_create(
+            name='Test Type')[0]
         self.carwash = CarWashModel.objects.create(
             name='Test Car Wash',
             latitude='55.152011',
