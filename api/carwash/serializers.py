@@ -272,11 +272,11 @@ class CarWashSerializer(CarWashCardSerializer):
             if distance < min_distance:
                 min_distance = distance
                 nearest_metro_station = metro_station
-            return {
-                'name': nearest_metro_station.name,
-                'latitude': nearest_metro_station.latitude,
-                'longitude': nearest_metro_station.longitude
-            }
+        return {
+            'name': nearest_metro_station.name,
+            'latitude': nearest_metro_station.latitude,
+            'longitude': nearest_metro_station.longitude
+        }
 
     @staticmethod
     def get_open_until_list(obj):
