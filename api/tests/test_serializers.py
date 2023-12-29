@@ -16,18 +16,20 @@ class TestCarWashSerializer(unittest.TestCase):
 
     def setUp(self):
         self.serializer = CarWashSerializer()
-        self.type_ = CarWashTypeModel.objects.create(name='Test Type')
+        self.type_ = CarWashTypeModel.objects.get_or_create(
+            name='Test Type')[0]
         self.carwash = CarWashModel.objects.create(
             name='Test Car Wash',
-            latitude='55.752011',
-            longitude='37.617211',
-            type=self.type_,
+            latitude='55.152011',
+            longitude='37.417211',
             legal_person=True,
             loyalty='Test Loyalty',
             over_information='Test Over Information',
             rest_room=True,
             payment='cash',
         )
+        self.carwash.type.add(self.type_)
+        self.carwash.save()
         self.schedule = ScheduleModel.objects.create(
             carwash=self.carwash,
             day_of_week=timezone.now().weekday(),

@@ -92,12 +92,8 @@ class CarWashModel(models.Model):
     loyalty = models.TextField(verbose_name="Лояльность", null=True,
                                blank=True, max_length=500)
 
-    type = models.ForeignKey(CarWashTypeModel, verbose_name='Тип автомойки',
-                             on_delete=models.SET_NULL, null=True)
-    metro = models.ManyToManyField(
-        MetroStationModel,
-        through='NearestMetroStationModel',
-        verbose_name='Ближайшие станции метро.')
+    type = models.ManyToManyField(CarWashTypeModel,
+                                  verbose_name='Тип автомойки')
     service = models.ManyToManyField(
         ServicesModel,
         through='CarWashServicesModel',
@@ -115,7 +111,7 @@ class CarWashModel(models.Model):
         null=True,
         blank=True,
         help_text='Выберите способ оплаты',
-        max_length=30
+        max_length=40
     )
     over_information = models.TextField(
         max_length=1000,
@@ -135,38 +131,11 @@ class CarWashModel(models.Model):
         return f'{self.name}'
 
 
-class NearestMetroStationModel(models.Model):
-    """Промежуточная модель связи станции метро и автомойки."""
-    carwash = models.ForeignKey(CarWashModel, verbose_name='Автомойка',
-                                on_delete=models.CASCADE)
-    metro_station = models.ForeignKey(
-        MetroStationModel,
-        verbose_name='Станция метро',
-        on_delete=models.CASCADE
-    )
-    distance = models.PositiveIntegerField(
-        verbose_name='Расстояние до автомойки',
-        blank=True, null=True
-    )
-
-    class Meta:
-        verbose_name = 'Ближайшая станция метро'
-        verbose_name_plural = 'Ближайшие станции метро'
-        constraints = [
-            models.UniqueConstraint(
-                fields=['carwash', 'metro_station'],
-                name='unique_carwash_metro')
-        ]
-
-    def __str__(self):
-        return f'{self.carwash} рядом с метро {self.metro_station}'
-
-
 class CarWashImageModel(models.Model):
     """Модель для фотографий для автомойки."""
     carwash = models.ForeignKey(CarWashModel, verbose_name='Автомойка',
                                 on_delete=models.CASCADE)
-    image = models.URLField(verbose_name='Ссылка на фото автомойки')
+    image = models.ImageField(verbose_name='Фото автомойки')
     avatar = models.BooleanField(verbose_name='На аватарку', default=False)
 
     class Meta:
