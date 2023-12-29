@@ -2,12 +2,11 @@ import unittest
 
 from django.utils import timezone
 
-from api.carwash.serializers import (
-    CarWashContactsSerializer,
-    CarWashSerializer,
-    CarWashScheduleSerializer
-)
-from carwash.models import CarWashModel, CarWashImageModel, CarWashTypeModel
+from api.carwash.serializers import (CarWashCardSerializer,
+                                     CarWashContactsSerializer,
+                                     CarWashScheduleSerializer,
+                                     CarWashSerializer)
+from carwash.models import CarWashImageModel, CarWashModel, CarWashTypeModel
 from contacts.models import ContactsModel
 from schedule.models import ScheduleModel
 
@@ -95,7 +94,7 @@ class TestCarWashContactsSerializer(TestCarWashSerializer):
         super().setUp()
         self.serializer = CarWashContactsSerializer()
 
-        
+
 class TestCarWashCardSerializer(TestCarWashSerializer):
     """Тесты сериалайзера карточки мойки."""
 
@@ -110,7 +109,7 @@ class TestCarWashCardSerializer(TestCarWashSerializer):
             website='test_website.com',
         )
 
-    def test_fields(self):
+    def test_fields_data(self):
         """Проверка полей сериализатора."""
         expected_data = [
             ['address', self.contacts.address],
