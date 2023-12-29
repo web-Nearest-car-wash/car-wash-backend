@@ -241,7 +241,7 @@ class CarWashSerializer(CarWashCardSerializer):
         model = CarWashModel
 
     @staticmethod
-    def get_metro(self, obj):
+    def get_metro(obj):
         car_wash_longitude = obj.longitude
         car_wash_latitude = obj.latitude
 
