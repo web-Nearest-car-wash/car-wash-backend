@@ -45,7 +45,7 @@ class CarWashContactsSerializer(ModelSerializer):
     """
 
     class Meta:
-        fields = ('address', 'phone', 'website')
+        fields = ('address', 'email', 'phone', 'website')
         model = ContactsModel
 
 

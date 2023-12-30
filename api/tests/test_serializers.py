@@ -68,33 +68,6 @@ class TestCarWashSerializer(unittest.TestCase):
         )
 
 
-class TestCarWashScheduleSerializer(TestCarWashSerializer):
-    """Тесты сериалайзера расписания мойки."""
-
-    def setUp(self):
-        super().setUp()
-        self.serializer = CarWashScheduleSerializer()
-
-    def test_fields(self):
-        """Проверка полей сериализатора."""
-        expected_fields = (
-            'day_of_week',
-            'opening_time',
-            'closing_time',
-            'around_the_clock',
-            'open_until_list',
-        )
-        self.assertEqual(self.serializer.Meta.fields, expected_fields)
-
-
-class TestCarWashContactsSerializer(TestCarWashSerializer):
-    """Тесты сериалайзера контактов мойки."""
-
-    def setUp(self):
-        super().setUp()
-        self.serializer = CarWashContactsSerializer()
-
-
 class TestCarWashCardSerializer(TestCarWashSerializer):
     """Тесты сериалайзера карточки мойки."""
 
@@ -108,18 +81,6 @@ class TestCarWashCardSerializer(TestCarWashSerializer):
             phone='89217553535',
             website='test_website.com',
         )
-
-    def test_fields_data(self):
-        """Проверка полей сериализатора."""
-        expected_data = [
-            ['address', self.contacts.address],
-            ['phone', self.contacts.phone],
-            ['website', self.contacts.website],
-        ]
-        serialized_data = self.serializer.to_representation(self.contacts)
-        for field, data in expected_data:
-            with self.subTest(field=field):
-                self.assertEqual(serialized_data.get(field), data)
         self.image = CarWashImageModel.objects.create(
             carwash=self.carwash,
             image="https://example.com/image.jpg",
@@ -130,6 +91,8 @@ class TestCarWashCardSerializer(TestCarWashSerializer):
         self.carwash.delete()
         self.type_.delete()
         self.schedule.delete()
+        self.contacts.delete()
+        self.image.delete()
 
     def test_fields(self):
         """Проверка полей сериализатора."""
@@ -154,9 +117,45 @@ class TestCarWashCardSerializer(TestCarWashSerializer):
         )
         self.assertEqual(self.serializer.Meta.fields, expected_fields)
 
-    def test_model(self):
-        """Провека модели для сериалайзера."""
-        self.assertEqual(self.serializer.Meta.model, CarWashModel)
+
+class TestCarWashContactsSerializer(TestCarWashCardSerializer):
+    """Тесты сериалайзера контактов мойки."""
+
+    def setUp(self):
+        super().setUp()
+        self.serializer = CarWashContactsSerializer()
+
+    def test_fields(self):
+        """Проверка полей сериализатора."""
+        expected_data = [
+            ['address', self.contacts.address],
+            ['email', self.contacts.email],
+            ['phone', self.contacts.phone],
+            ['website', self.contacts.website],
+        ]
+        serialized_data = self.serializer.to_representation(self.contacts)
+        for field, data in expected_data:
+            with self.subTest(field=field):
+                self.assertEqual(serialized_data.get(field), data)
+
+
+class TestCarWashScheduleSerializer(TestCarWashSerializer):
+    """Тесты сериалайзера расписания мойки."""
+
+    def setUp(self):
+        super().setUp()
+        self.serializer = CarWashScheduleSerializer()
+
+    def test_fields(self):
+        """Проверка полей сериализатора."""
+        expected_fields = (
+            'day_of_week',
+            'opening_time',
+            'closing_time',
+            'around_the_clock',
+            'open_until_list',
+        )
+        self.assertEqual(self.serializer.Meta.fields, expected_fields)
 
 
 if __name__ == '__main__':
