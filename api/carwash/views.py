@@ -32,8 +32,13 @@ class CarWashViewSet(ReadOnlyModelViewSet):
         filters.OrderingFilter,
         filters.SearchFilter
     )
-    # filterset_class = CarWashFilter
-    search_fields = ('name', 'type__name', 'address')
+    filterset_class = CarWashFilter
+    search_fields = (
+        'address',
+        'name',
+        'service__name',
+        'type__name',
+    )
     ordering_fields = ('rating',)
     permission_classes = [AllowAny]
     http_method_names = ['get']

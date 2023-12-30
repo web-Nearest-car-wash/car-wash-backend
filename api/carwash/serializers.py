@@ -236,6 +236,7 @@ class CarWashSerializer(CarWashCardSerializer):
             'metro',
             'name',
             'rating',
+            'services',
             'type',
             'latitude',
             'longitude',
