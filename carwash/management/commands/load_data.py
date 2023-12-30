@@ -22,7 +22,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
 
-        with open("data/data_output.json") as f:
+        with open("data/data_output.json", encoding='utf-8') as f:
             json_data = json.load(f)
         print("opened")
         metro_data = json_data.get("metro")
