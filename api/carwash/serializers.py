@@ -123,7 +123,7 @@ class CarWashCardSerializer(ModelSerializer):
     """
     Сериализатор GET для карточки мойки
     """
-    type = CarWashTypeSerializer()
+    type = CarWashTypeSerializer(many=True, read_only=True)
     rating = serializers.FloatField(read_only=True)
     services = serializers.SerializerMethodField()
     contacts = serializers.SerializerMethodField()
@@ -226,6 +226,7 @@ class CarWashSerializer(CarWashCardSerializer):
     """Сериализатор для вывода моек на главной странице."""
 
     open_until = serializers.SerializerMethodField()
+    type = CarWashTypeSerializer(many=True, read_only=True)
 
     class Meta:
         fields = (
@@ -235,6 +236,7 @@ class CarWashSerializer(CarWashCardSerializer):
             'metro',
             'name',
             'rating',
+            'type',
             'latitude',
             'longitude',
             'open_until',
