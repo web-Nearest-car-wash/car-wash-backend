@@ -270,5 +270,4 @@ class CarWashSerializer(CarWashCardSerializer):
         )
         carwash_coordinates = (obj.latitude, obj.longitude)
         user_coordinates = (user_latitude, user_longitude)
-        distance = geodesic(user_coordinates, carwash_coordinates).km
-        return distance
+        return geodesic(user_coordinates, carwash_coordinates).km

@@ -12,6 +12,7 @@ class ServicesAdmin(admin.ModelAdmin):
 
 admin.site.register(ServicesModel, ServicesAdmin)
 
+
 @admin.register(KeywordsServicesModel)
 class KeywordsServicesModelAdmin(admin.ModelAdmin):
     list_display = ['name']
