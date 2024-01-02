@@ -13,8 +13,18 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='KeywordsServicesModel',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(db_index=True, help_text='Ключевое слово', max_length=100, unique=True, verbose_name='Ключевое слово')),
+                ('id', models.BigAutoField(
+                    auto_created=True,
+                    primary_key=True,
+                    serialize=False,
+                    verbose_name='ID'
+                )),
+                ('name', models.CharField(
+                    db_index=True,
+                    help_text='Ключевое слово',
+                    max_length=100, unique=True,
+                    verbose_name='Ключевое слово'
+                )),
             ],
             options={
                 'verbose_name': 'Ключевое слово услуги',

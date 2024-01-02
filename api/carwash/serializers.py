@@ -1,6 +1,4 @@
 import datetime as dt
-from decimal import Decimal
-from math import atan2, cos, radians, sin, sqrt
 
 from django.conf import settings
 from django.db.models import Q

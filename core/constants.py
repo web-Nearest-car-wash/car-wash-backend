@@ -64,3 +64,10 @@ KEYWORDS_SERVICES_API_SCHEMA_EXTENSIONS = {
         summary="Получить ключевые слова для фильтрации по услугам"
     )
 }
+
+CARWASH_TYPE_API_SCHEMA_EXTENSIONS = {
+    'list': extend_schema(
+        tags=['Types'],
+        summary="Получить типы автомоек"
+    )
+}

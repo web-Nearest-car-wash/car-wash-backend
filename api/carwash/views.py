@@ -1,23 +1,20 @@
-from django.db.models import F, FloatField, ExpressionWrapper
-from django.db.models.functions import Sqrt
-
 from django.conf import settings
 from django.db.models import Avg
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import extend_schema_view
 from rest_framework import filters
 from rest_framework.permissions import AllowAny
-from rest_framework.response import Response
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
-from carwash.models import CarWashModel
+from carwash.models import CarWashModel, CarWashTypeModel
 from core.constants import (CARWASH_API_SCHEMA_EXTENSIONS,
+                            CARWASH_TYPE_API_SCHEMA_EXTENSIONS,
                             KEYWORDS_SERVICES_API_SCHEMA_EXTENSIONS)
 from services.models import KeywordsServicesModel
 
 from .filters import CarWashFilter
 from .serializers import (CarWashCardSerializer, CarWashSerializer,
-                          KeywordsServicesSerializer)
+                          KeywordsServicesSerializer, CarWashTypeSerializer)
 
 
 @extend_schema_view(**CARWASH_API_SCHEMA_EXTENSIONS)
@@ -58,3 +55,27 @@ class KeywordsServicesViewSet(ReadOnlyModelViewSet):
     serializer_class = KeywordsServicesSerializer
     permission_classes = [AllowAny]
     http_method_names = ['get']
+
+
+@extend_schema_view(**CARWASH_TYPE_API_SCHEMA_EXTENSIONS)
+class CarWashTypeViewSet(ReadOnlyModelViewSet):
+    """
+    Вьюсет предоставляет доступ к типам автомоек,
+    необходимым для фильтрации по типам.
+    """
+    queryset = CarWashTypeModel.objects.all()
+    serializer_class = CarWashTypeSerializer
+    permission_classes = [AllowAny]
+    http_method_names = ['get']
+
+    def get_queryset(self):
+        CARWASH_TYPES = [
+            'самообслуживания',
+            'комплексная',
+            'автоматическая',
+            'бесконтактная',
+            'ручная'
+        ]
+        return self.queryset.filter(
+            name__in=CARWASH_TYPES
+        )
