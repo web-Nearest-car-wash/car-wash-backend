@@ -1,7 +1,10 @@
 import datetime as dt
+from decimal import Decimal
 from math import atan2, cos, radians, sin, sqrt
 
+from django.conf import settings
 from django.db.models import Q
+from geopy.distance import geodesic
 from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
 
@@ -13,6 +16,7 @@ from core.constants import (AROUND_THE_CLOCK, CLOSED, NO_INFORMATION,
                             PAYMENT_CHOICES, TIME_UTC_CORRECTION, WORKS_UNTIL)
 from promotions.models import PromotionsModel
 from schedule.models import ScheduleModel
+from services.models import KeywordsServicesModel
 
 
 class CarWashTypeSerializer(ModelSerializer):
@@ -21,6 +25,16 @@ class CarWashTypeSerializer(ModelSerializer):
     class Meta:
         fields = ('name',)
         model = CarWashTypeModel
+
+
+class KeywordsServicesSerializer(ModelSerializer):
+    """Сериализатор для ключевых слов в услугах."""
+
+    name = serializers.CharField(max_length=50)
+
+    class Meta:
+        fields = ('name',)
+        model = KeywordsServicesModel
 
 
 class CarWashServicesSerializer(ModelSerializer):
@@ -159,8 +173,9 @@ class CarWashCardSerializer(ModelSerializer):
         model = CarWashModel
 
     def get_metro(self, obj):
-        car_wash_longitude = obj.longitude
-        car_wash_latitude = obj.latitude
+        carwash_longitude = obj.longitude
+        carwash_latitude = obj.latitude
+        carwash_coordinates = (carwash_latitude, carwash_longitude)
 
         all_metro_stations = MetroStationModel.objects.all()
 
@@ -171,21 +186,13 @@ class CarWashCardSerializer(ModelSerializer):
         for metro_station in all_metro_stations:
             metro_station_longitude = metro_station.longitude
             metro_station_latitude = metro_station.latitude
-
-            lat1, lon1, lat2, lon2 = map(
-                radians,
-                [
-                    car_wash_latitude,
-                    car_wash_longitude,
-                    metro_station_latitude,
-                    metro_station_longitude
-                ]
+            metro_station_coordinates = (
+                metro_station_latitude, metro_station_longitude
             )
-            dlon = lon2 - lon1
-            dlat = lat2 - lat1
-            a = sin(dlat / 2) ** 2 + cos(lat1) * cos(lat2) * sin(dlon / 2) ** 2
-            c = 2 * atan2(sqrt(a), sqrt(1 - a))
-            distance = 6371 * c
+
+            distance = geodesic(
+                carwash_coordinates, metro_station_coordinates
+            ).km
             if distance < min_distance:
                 min_distance = distance
                 nearest_metro_station = metro_station
@@ -224,6 +231,8 @@ class CarWashSerializer(CarWashCardSerializer):
     """Сериализатор для вывода моек на главной странице."""
 
     open_until_list = serializers.SerializerMethodField()
+    services = serializers.SerializerMethodField()
+    distance = serializers.SerializerMethodField()
 
     class Meta:
         fields = (
@@ -236,6 +245,8 @@ class CarWashSerializer(CarWashCardSerializer):
             'latitude',
             'longitude',
             'open_until_list',
+            'distance',
+            'services'
         )
         model = CarWashModel
 
@@ -246,3 +257,20 @@ class CarWashSerializer(CarWashCardSerializer):
             serializer = CarWashScheduleSerializer(queryset)
             return serializer.get_open_until(queryset)
         return None
+
+    @staticmethod
+    def get_services(obj):
+        queryset = obj.carwashservicesmodel_set.all()
+        return CarWashServicesSerializer(queryset, many=True).data
+
+    def get_distance(self, obj):
+        user_latitude = self.context['request'].query_params.get(
+            'latitude', settings.DEFAULT_LATITUDE
+        )
+        user_longitude = self.context['request'].query_params.get(
+            'longitude', settings.DEFAULT_LONGITUDE
+        )
+        carwash_coordinates = (obj.latitude, obj.longitude)
+        user_coordinates = (user_latitude, user_longitude)
+        distance = geodesic(user_coordinates, carwash_coordinates).km
+        return distance
