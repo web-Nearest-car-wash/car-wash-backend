@@ -229,22 +229,24 @@ class CarWashSerializer(CarWashCardSerializer):
     """Сериализатор для вывода моек на главной странице."""
 
     open_until_list = serializers.SerializerMethodField()
-    services = serializers.SerializerMethodField()
+    #services = serializers.SerializerMethodField()
     distance = serializers.SerializerMethodField()
+    dist = serializers.DecimalField(max_digits=9, decimal_places=5)
 
     class Meta:
         fields = (
             'id',
             'image',
-            'contacts',
-            'metro',
+            #'contacts',
+            #'metro',
             'name',
-            'rating',
-            'latitude',
-            'longitude',
+            'dist',
+            #'rating',
+            #'latitude',
+            #'longitude',
             'open_until_list',
             'distance',
-            'services'
+            #'services'
         )
         model = CarWashModel
 
@@ -256,10 +258,10 @@ class CarWashSerializer(CarWashCardSerializer):
             return serializer.get_open_until(queryset)
         return None
 
-    @staticmethod
-    def get_services(obj):
-        queryset = obj.carwashservicesmodel_set.all()
-        return CarWashServicesSerializer(queryset, many=True).data
+   # @staticmethod
+   # def get_services(obj):
+   #     queryset = obj.carwashservicesmodel_set.all()
+   #     return CarWashServicesSerializer(queryset, many=True).data
 
     def get_distance(self, obj):
         user_latitude = self.context['request'].query_params.get(
