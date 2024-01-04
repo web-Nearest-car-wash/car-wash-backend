@@ -2,7 +2,7 @@ from decimal import Decimal
 from math import sin, cos, radians
 
 from django.conf import settings
-from django.db.models import (Avg, DecimalField,
+from django.db.models import (Avg, FloatField,
                               ExpressionWrapper, F, Func)
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import extend_schema_view
@@ -73,7 +73,7 @@ class CarWashViewSet(ReadOnlyModelViewSet):
                         function='COS'
                     ), function='ACOS'
                 ),
-                output_field=DecimalField()
+                output_field=FloatField()
             ),
         )
 
