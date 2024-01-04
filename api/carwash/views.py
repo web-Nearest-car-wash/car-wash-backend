@@ -1,4 +1,5 @@
 from django.db.models import Avg, F
+from django.db.models.functions import Round
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import extend_schema_view
 from rest_framework import filters
@@ -23,7 +24,7 @@ class CarWashViewSet(ReadOnlyModelViewSet):
     """
 
     queryset = CarWashModel.objects.all().annotate(
-        rating=Avg('carwashratingmodel__score'),
+        rating=Round(Avg('carwashratingmodel__score'), 2),
         address=F('contactsmodel__address')
     )
     serializer_class = CarWashSerializer
