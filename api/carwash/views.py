@@ -1,9 +1,9 @@
 from decimal import Decimal
+from math import sin, cos, radians
 
 from django.conf import settings
 from django.db.models import (Avg, DecimalField,
-                              ExpressionWrapper, F,
-                              FloatField, Func)
+                              ExpressionWrapper, F, Func)
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import extend_schema_view
 from rest_framework import filters
@@ -32,18 +32,19 @@ class CarWashViewSet(ReadOnlyModelViewSet):
     """
 
     queryset = CarWashModel.objects.all().annotate(
-        rating=Avg('carwashratingmodel__score')
+        rating=Avg('carwashratingmodel__score'),
+
     )
     serializer_class = CarWashSerializer
     filter_backends = (DjangoFilterBackend, filters.OrderingFilter)
     filterset_class = CarWashFilter
-    ordering_fields = ('rating', 'dist')
+    ordering_fields = ('rating', 'distance')
     permission_classes = [AllowAny]
     http_method_names = ['get']
 
     def get_queryset(self):
-        queryset = self.queryset
-
+        """"Добавление в queryset поля расстояния
+        до геопозиции для возможности сортировки"""
         user_latitude = Decimal(
             self.request.query_params.get(
                 'latitude', settings.DEFAULT_LATITUDE
@@ -54,15 +55,27 @@ class CarWashViewSet(ReadOnlyModelViewSet):
                 'longitude', settings.DEFAULT_LONGITUDE
             )
         )
-        queryset = queryset.annotate(
-            dist=ExpressionWrapper((
-                        (F('latitude') - user_latitude)*111
-                ) ** 2 + (
-                        (F('longitude') - user_longitude)*89
-                ) ** 2,
-                    output_field=DecimalField()
-                )
-            )
+        queryset = self.queryset.annotate(
+            distance=ExpressionWrapper(
+                6371 * Func(
+                    Func(
+                        Func(F('latitude'), function='RADIANS'),
+                        function='SIN'
+                    )*sin(
+                        radians(user_latitude)
+                    ) + Func(
+                        Func(F('latitude'), function='RADIANS'),
+                        function='COS'
+                    )*cos(radians(user_latitude))*Func(
+                        Func(
+                            F('longitude'), function='RADIANS'
+                        )-radians(user_longitude),
+                        function='COS'
+                    ), function='ACOS'
+                ),
+                output_field=DecimalField()
+            ),
+        )
         return queryset
 
     def get_serializer_class(self):

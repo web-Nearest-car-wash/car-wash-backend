@@ -229,24 +229,22 @@ class CarWashSerializer(CarWashCardSerializer):
     """Сериализатор для вывода моек на главной странице."""
 
     open_until_list = serializers.SerializerMethodField()
-    #services = serializers.SerializerMethodField()
-    distance = serializers.SerializerMethodField()
-    dist = serializers.DecimalField(max_digits=9, decimal_places=5)
+    services = serializers.SerializerMethodField()
+    distance = serializers.FloatField()
 
     class Meta:
         fields = (
             'id',
             'image',
-            #'contacts',
-            #'metro',
+            'contacts',
+            'metro',
             'name',
-            'dist',
-            #'rating',
-            #'latitude',
-            #'longitude',
+            'rating',
+            'latitude',
+            'longitude',
             'open_until_list',
             'distance',
-            #'services'
+            'services'
         )
         model = CarWashModel
 
@@ -258,18 +256,7 @@ class CarWashSerializer(CarWashCardSerializer):
             return serializer.get_open_until(queryset)
         return None
 
-   # @staticmethod
-   # def get_services(obj):
-   #     queryset = obj.carwashservicesmodel_set.all()
-   #     return CarWashServicesSerializer(queryset, many=True).data
-
-    def get_distance(self, obj):
-        user_latitude = self.context['request'].query_params.get(
-            'latitude', settings.DEFAULT_LATITUDE
-        )
-        user_longitude = self.context['request'].query_params.get(
-            'longitude', settings.DEFAULT_LONGITUDE
-        )
-        carwash_coordinates = (obj.latitude, obj.longitude)
-        user_coordinates = (user_latitude, user_longitude)
-        return geodesic(user_coordinates, carwash_coordinates).km
+    @staticmethod
+    def get_services(obj):
+        queryset = obj.carwashservicesmodel_set.all()
+        return CarWashServicesSerializer(queryset, many=True).data
