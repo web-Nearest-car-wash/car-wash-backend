@@ -55,7 +55,7 @@ class CarWashViewSet(ReadOnlyModelViewSet):
                 'longitude', settings.DEFAULT_LONGITUDE
             )
         )
-        queryset = self.queryset.annotate(
+        return self.queryset.annotate(
             distance=ExpressionWrapper(
                 6371 * Func(
                     Func(
@@ -76,7 +76,6 @@ class CarWashViewSet(ReadOnlyModelViewSet):
                 output_field=DecimalField()
             ),
         )
-        return queryset
 
     def get_serializer_class(self):
         """Возвращает соответствующий класс сериализатора в
