@@ -13,6 +13,7 @@ from rest_framework.viewsets import ReadOnlyModelViewSet
 from carwash.models import CarWashModel, CarWashTypeModel
 from core.constants import (CARWASH_API_SCHEMA_EXTENSIONS,
                             CARWASH_TYPE_API_SCHEMA_EXTENSIONS,
+                            EARTH_AVERAGE_RADIUS,
                             KEYWORDS_SERVICES_API_SCHEMA_EXTENSIONS)
 from services.models import KeywordsServicesModel
 
@@ -49,7 +50,6 @@ class CarWashViewSet(ReadOnlyModelViewSet):
         'service__name',
         'type__name',
     )
-    ordering_fields = ('rating',)
     permission_classes = [AllowAny]
     http_method_names = ['get']
 
@@ -68,7 +68,7 @@ class CarWashViewSet(ReadOnlyModelViewSet):
         )
         return self.queryset.annotate(
             distance=ExpressionWrapper(
-                6371 * Func(
+                EARTH_AVERAGE_RADIUS * Func(
                     Func(
                         Func(F('latitude'), function='RADIANS'),
                         function='SIN'

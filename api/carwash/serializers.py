@@ -229,10 +229,10 @@ class CarWashCardSerializer(ModelSerializer):
 class CarWashSerializer(CarWashCardSerializer):
     """Сериализатор для вывода моек на главной странице."""
 
-    services = serializers.SerializerMethodField()
+    # services = serializers.SerializerMethodField()
     distance = serializers.FloatField()
     open_until = serializers.SerializerMethodField()
-    type = CarWashTypeSerializer(many=True, read_only=True)
+    # type = CarWashTypeSerializer(many=True, read_only=True)
 
     class Meta:
         fields = (
@@ -242,12 +242,11 @@ class CarWashSerializer(CarWashCardSerializer):
             'metro',
             'name',
             'rating',
-            'services',
-            'type',
+            # 'services',
+            # 'type',
             'latitude',
             'longitude',
             'distance',
-            'services'
             'open_until',
         )
         model = CarWashModel
@@ -260,7 +259,7 @@ class CarWashSerializer(CarWashCardSerializer):
             return serializer.get_open_until_list(queryset)
         return None
 
-    @staticmethod
-    def get_services(obj):
-        queryset = obj.carwashservicesmodel_set.all()
-        return CarWashServicesSerializer(queryset, many=True).data
+    # @staticmethod
+    # def get_services(obj):
+    #     queryset = obj.carwashservicesmodel_set.all()
+    #     return CarWashServicesSerializer(queryset, many=True).data

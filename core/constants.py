@@ -68,6 +68,8 @@ KEYWORDS_SERVICES_API_SCHEMA_EXTENSIONS = {
 CARWASH_TYPE_API_SCHEMA_EXTENSIONS = {
     'list': extend_schema(
         tags=['Types'],
-        summary="Получить типы автомоек"
+        summary="Получить типы автомоек",
     )
 }
+
+EARTH_AVERAGE_RADIUS = 6371
