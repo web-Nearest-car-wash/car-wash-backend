@@ -33,12 +33,23 @@ class CarWashViewSet(ReadOnlyModelViewSet):
 
     queryset = CarWashModel.objects.all().annotate(
         rating=Avg('carwashratingmodel__score'),
-
+        address=F('contactsmodel__address')
     )
     serializer_class = CarWashSerializer
-    filter_backends = (DjangoFilterBackend, filters.OrderingFilter)
+    filter_backends = (
+        DjangoFilterBackend,
+        filters.OrderingFilter,
+        filters.SearchFilter
+    )
     filterset_class = CarWashFilter
     ordering_fields = ('rating', 'distance')
+    search_fields = (
+        'address',
+        'name',
+        'service__name',
+        'type__name',
+    )
+    ordering_fields = ('rating',)
     permission_classes = [AllowAny]
     http_method_names = ['get']
 

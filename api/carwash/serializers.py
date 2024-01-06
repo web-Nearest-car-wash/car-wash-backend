@@ -56,7 +56,7 @@ class CarWashContactsSerializer(ModelSerializer):
     """
 
     class Meta:
-        fields = ('address', 'phone', 'website')
+        fields = ('address', 'email', 'phone', 'website')
         model = ContactsModel
 
 
@@ -76,7 +76,7 @@ class CarWashScheduleSerializer(ModelSerializer):
     Сериализатор для расписания мойки
     """
     day_of_week = serializers.SerializerMethodField()
-    open_until = serializers.SerializerMethodField()
+    open_until_list = serializers.SerializerMethodField()
 
     class Meta:
         fields = (
@@ -84,7 +84,7 @@ class CarWashScheduleSerializer(ModelSerializer):
             'opening_time',
             'closing_time',
             'around_the_clock',
-            'open_until',
+            'open_until_list',
         )
         model = ScheduleModel
 
@@ -93,7 +93,7 @@ class CarWashScheduleSerializer(ModelSerializer):
         return [schedule.get_day_of_week() for schedule in obj]
 
     @staticmethod
-    def get_open_until(obj):
+    def get_open_until_list(obj):
         current_day_of_week = dt.date.today().weekday()
         current_time = dt.datetime.now() + TIME_UTC_CORRECTION
         today_schedule = obj.filter(
@@ -134,7 +134,7 @@ class CarWashCardSerializer(ModelSerializer):
     """
     Сериализатор GET для карточки мойки
     """
-    type = CarWashTypeSerializer()
+    type = CarWashTypeSerializer(many=True, read_only=True)
     rating = serializers.FloatField(read_only=True)
     services = serializers.SerializerMethodField()
     contacts = serializers.SerializerMethodField()
@@ -193,6 +193,8 @@ class CarWashCardSerializer(ModelSerializer):
             if distance < min_distance:
                 min_distance = distance
                 nearest_metro_station = metro_station
+        if not nearest_metro_station:
+            return None
         return {
             'name': nearest_metro_station.name,
             'latitude': nearest_metro_station.latitude,
@@ -227,9 +229,10 @@ class CarWashCardSerializer(ModelSerializer):
 class CarWashSerializer(CarWashCardSerializer):
     """Сериализатор для вывода моек на главной странице."""
 
-    open_until_list = serializers.SerializerMethodField()
     services = serializers.SerializerMethodField()
     distance = serializers.FloatField()
+    open_until = serializers.SerializerMethodField()
+    type = CarWashTypeSerializer(many=True, read_only=True)
 
     class Meta:
         fields = (
@@ -239,20 +242,22 @@ class CarWashSerializer(CarWashCardSerializer):
             'metro',
             'name',
             'rating',
+            'services',
+            'type',
             'latitude',
             'longitude',
-            'open_until_list',
             'distance',
             'services'
+            'open_until',
         )
         model = CarWashModel
 
     @staticmethod
-    def get_open_until_list(obj):
+    def get_open_until(obj):
         queryset = obj.schedules.all()
         if queryset:
             serializer = CarWashScheduleSerializer(queryset)
-            return serializer.get_open_until(queryset)
+            return serializer.get_open_until_list(queryset)
         return None
 
     @staticmethod

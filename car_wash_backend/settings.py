@@ -18,10 +18,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -33,7 +31,6 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', '123')
 DEBUG = strtobool(os.getenv("DEBUG", "False"))
 
 ALLOWED_HOSTS = ['*']
-
 
 # Application definition
 
@@ -90,29 +87,28 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'car_wash_backend.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-if DEBUG:
-    # DATABASES = {
-    #    'default': {
-    #         'ENGINE': 'django.db.backends.sqlite3',
-    #         'NAME': BASE_DIR / 'db.sqlite3',
-    #     }
-    # }
-    # else:
-    DATABASES = {
-        "default": {
-            "ENGINE": os.getenv("DB_ENGINE", default="django.db.backends.postgresql"),
-            "NAME": os.getenv("POSTGRES_DB", default="localhost"),
-            "USER": os.getenv("POSTGRES_USER", default="localhost"),
-            "PASSWORD": os.getenv("POSTGRES_PASSWORD", default="localhost"),
-            "HOST": os.getenv("POSTGRES_HOST", default="localhost"),
-            "PORT": os.getenv("POSTGRES_PORT", default=5432),
-        }
+# if DEBUG:
+# DATABASES = {
+#    'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+# else:
+DATABASES = {
+    "default": {
+        "ENGINE": os.getenv("DB_ENGINE",
+                            default="django.db.backends.postgresql"),
+        "NAME": os.getenv("POSTGRES_DB", default="localhost"),
+        "USER": os.getenv("POSTGRES_USER", default="localhost"),
+        "PASSWORD": os.getenv("POSTGRES_PASSWORD", default="localhost"),
+        "HOST": os.getenv("POSTGRES_HOST", default="localhost"),
+        "PORT": os.getenv("POSTGRES_PORT", default=5432),
     }
-
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -132,7 +128,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
@@ -144,7 +139,6 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
@@ -154,7 +148,6 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
 
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
@@ -177,8 +170,8 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-   'ACCESS_TOKEN_LIFETIME': timedelta(days=30),
-   'AUTH_HEADER_TYPES': ('Bearer',),
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=30),
+    'AUTH_HEADER_TYPES': ('Bearer',),
 }
 
 DJOSER = {
@@ -202,8 +195,8 @@ SPECTACULAR_SETTINGS = {
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
     'SWAGGER_UI_SETTINGS': {
-            "filter": True,  # включить поиск по тегам
-        },
+        "filter": True,  # включить поиск по тегам
+    },
     'COMPONENT_SPLIT_REQUEST': True
 }
 
