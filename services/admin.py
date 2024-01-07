@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import ServicesModel
+from .models import KeywordsServicesModel, ServicesModel
 
 
 class ServicesAdmin(admin.ModelAdmin):
@@ -11,3 +11,8 @@ class ServicesAdmin(admin.ModelAdmin):
 
 
 admin.site.register(ServicesModel, ServicesAdmin)
+
+
+@admin.register(KeywordsServicesModel)
+class KeywordsServicesModelAdmin(admin.ModelAdmin):
+    list_display = ['name']
