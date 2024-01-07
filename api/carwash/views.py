@@ -1,9 +1,11 @@
 from decimal import Decimal
-from math import sin, cos, radians
+from math import cos, radians, sin
 
 from django.conf import settings
-from django.db.models import (Avg, FloatField,
-                              ExpressionWrapper, F, Func)
+from django.db.models import (
+    Avg, ExpressionWrapper, F, FloatField,  Func
+)
+from django.db.models.functions import Round
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import extend_schema_view
 from rest_framework import filters
@@ -18,8 +20,10 @@ from core.constants import (CARWASH_API_SCHEMA_EXTENSIONS,
 from services.models import KeywordsServicesModel
 
 from .filters import CarWashFilter
-from .serializers import (CarWashCardSerializer, CarWashSerializer,
-                          KeywordsServicesSerializer, CarWashTypeSerializer)
+from .serializers import (
+    CarWashCardSerializer, CarWashSerializer, CarWashTypeSerializer,
+    KeywordsServicesSerializer
+)
 
 
 @extend_schema_view(**CARWASH_API_SCHEMA_EXTENSIONS)
@@ -33,7 +37,7 @@ class CarWashViewSet(ReadOnlyModelViewSet):
     """
 
     queryset = CarWashModel.objects.all().annotate(
-        rating=Avg('carwashratingmodel__score'),
+        rating=Round(Avg('carwashratingmodel__score'), 2),
         address=F('contactsmodel__address')
     )
     serializer_class = CarWashSerializer
