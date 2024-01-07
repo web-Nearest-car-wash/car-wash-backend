@@ -90,25 +90,25 @@ WSGI_APPLICATION = 'car_wash_backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-if DEBUG:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
+# if DEBUG:
+# DATABASES = {
+#    'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+# else:
+DATABASES = {
+    "default": {
+        "ENGINE": os.getenv("DB_ENGINE",
+                            default="django.db.backends.postgresql"),
+        "NAME": os.getenv("POSTGRES_DB", default="localhost"),
+        "USER": os.getenv("POSTGRES_USER", default="localhost"),
+        "PASSWORD": os.getenv("POSTGRES_PASSWORD", default="localhost"),
+        "HOST": os.getenv("POSTGRES_HOST", default="localhost"),
+        "PORT": os.getenv("POSTGRES_PORT", default=5432),
     }
-else:
-    DATABASES = {
-        "default": {
-            "ENGINE": os.getenv("DB_ENGINE",
-                                default="django.db.backends.postgresql"),
-            "NAME": os.getenv("POSTGRES_DB", default="localhost"),
-            "USER": os.getenv("POSTGRES_USER", default="localhost"),
-            "PASSWORD": os.getenv("POSTGRES_PASSWORD", default="localhost"),
-            "HOST": os.getenv("POSTGRES_HOST", default="localhost"),
-            "PORT": os.getenv("POSTGRES_PORT", default=5432),
-        }
-    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -220,5 +220,15 @@ CSRF_TRUSTED_ORIGINS = [
     'http://185.41.161.91/'
 ]
 
-LAT_RANGE = os.getenv('LAT_RANGE', default='0.009')
-LONG_RANGE = os.getenv('LONG_RANGE', default='0.01')
+# диапазон поиска автомоек
+LAT_RANGE = os.getenv('LAT_RANGE', default='0.018')
+LONG_RANGE = os.getenv('LONG_RANGE', default='0.02')
+
+# координаты, которые используются, если геопозиция не передана
+DEFAULT_LATITUDE = os.getenv('DEFAULT_LATITUDE', default='55.7520233')
+DEFAULT_LONGITUDE = os.getenv('DEFAULT_LONGITUDE', default='37.6174994')
+
+# для фильтрации по типу автомоек
+CARWASH_TYPES = os.getenv(
+    'CARWASH_TYPES', default='самообслуживания,автоматическая,ручная'
+)
