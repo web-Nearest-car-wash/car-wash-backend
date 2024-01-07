@@ -1,9 +1,7 @@
 import json
-
-
-import requests
 import tempfile
 
+import requests
 from django.core import files
 from django.core.management import BaseCommand
 
