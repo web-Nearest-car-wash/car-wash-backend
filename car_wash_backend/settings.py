@@ -230,5 +230,5 @@ DEFAULT_LONGITUDE = os.getenv('DEFAULT_LONGITUDE', default='37.6174994')
 
 # для фильтрации по типу автомоек
 CARWASH_TYPES = os.getenv(
-    'CARWASH_TYPES', default=['самообслуживания', 'автоматическая', 'ручная']
+    'CARWASH_TYPES', default='самообслуживания,автоматическая,ручная'
 )

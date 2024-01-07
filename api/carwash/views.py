@@ -120,13 +120,6 @@ class CarWashTypeViewSet(ReadOnlyModelViewSet):
     http_method_names = ['get']
 
     def get_queryset(self):
-        carwash_types = [
-            'самообслуживания',
-            'комплексная',
-            'автоматическая',
-            'бесконтактная',
-            'ручная'
-        ]
         return self.queryset.filter(
-            name__in=carwash_types
+            name__in=settings.CARWASH_TYPES.split(',')
         )
