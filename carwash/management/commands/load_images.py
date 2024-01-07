@@ -5,6 +5,7 @@ import requests
 import tempfile
 
 from django.core import files
+from django.core.management import BaseCommand
 
 from carwash.models import CarWashImageModel, CarWashModel
 
