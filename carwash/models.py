@@ -135,7 +135,8 @@ class CarWashImageModel(models.Model):
     """Модель для фотографий для автомойки."""
     carwash = models.ForeignKey(CarWashModel, verbose_name='Автомойка',
                                 on_delete=models.CASCADE)
-    image = models.ImageField(verbose_name='Фото автомойки')
+    image = models.ImageField(verbose_name='Фото автомойки',
+                              upload_to='carwash/')
     avatar = models.BooleanField(verbose_name='На аватарку', default=False)
 
     class Meta:
