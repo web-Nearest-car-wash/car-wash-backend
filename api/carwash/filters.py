@@ -3,9 +3,8 @@ from decimal import Decimal
 
 from django.conf import settings
 from django.db.models import Q
-from django_filters.rest_framework import (
-    BooleanFilter, CharFilter, FilterSet, NumberFilter
-)
+from django_filters.rest_framework import (BooleanFilter, CharFilter,
+                                           FilterSet, NumberFilter)
 
 from carwash.models import CarWashModel
 from schedule.models import ScheduleModel

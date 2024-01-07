@@ -24,7 +24,6 @@ class Command(BaseCommand):
 
         with open("data/data_output.json", encoding='utf-8') as f:
             json_data = json.load(f)
-        print("opened")
         metro_data = json_data.get("metro")
         for metro in metro_data:
             try:

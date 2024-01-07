@@ -2,7 +2,7 @@ from random import choices, randint
 
 from django.core.management import BaseCommand
 
-from carwash.models import CarWashRatingModel, CarWashModel
+from carwash.models import CarWashModel, CarWashRatingModel
 
 
 class Command(BaseCommand):
