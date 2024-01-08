@@ -1,16 +1,13 @@
 from datetime import datetime
 from decimal import Decimal
 
+from django.conf import settings
 from django.db.models import Q
 from django_filters.rest_framework import (BooleanFilter, CharFilter,
                                            FilterSet, NumberFilter)
-from django_filters.rest_framework.filters import ModelMultipleChoiceFilter
 
 from carwash.models import CarWashModel
 from schedule.models import ScheduleModel
-from services.models import ServicesModel
-
-from .constants import LAT_RANGE, LONG_RANGE
 
 
 class CarWashFilter(FilterSet):
@@ -40,11 +37,9 @@ class CarWashFilter(FilterSet):
         method='filter_by_distance',
         label='Координаты пользователя: долгота')
 
-    services = ModelMultipleChoiceFilter(
-        queryset=ServicesModel.objects.all(),
-        field_name='service__name',
-        to_field_name='name',
-        label='Услуга'
+    services = CharFilter(
+        method='filter_services',
+        label='Услуги: название услуг через запятую без пробелов'
     )
 
     type = CharFilter(
@@ -63,11 +58,24 @@ class CarWashFilter(FilterSet):
         longitude = self.data.get('longitude')
         if latitude and longitude:
             return queryset.filter(
-                Q(latitude__range=(Decimal(latitude) - LAT_RANGE,
-                  Decimal(latitude) + LAT_RANGE)) &
-                Q(longitude__range=(Decimal(longitude) - LONG_RANGE,
-                  Decimal(longitude) + LONG_RANGE))
+                Q(latitude__range=(
+                    Decimal(latitude) - Decimal(settings.LAT_RANGE),
+                  Decimal(latitude) + Decimal(settings.LAT_RANGE))) &
+                Q(longitude__range=(
+                    Decimal(longitude) - Decimal(settings.LONG_RANGE),
+                  Decimal(longitude) + Decimal(settings.LONG_RANGE)))
             )
+        return queryset
+
+    def filter_services(self, queryset, name, value):
+        """Фильтрация по услугам"""
+        if value:
+            services_list = value.split(',')
+            for service in services_list:
+                queryset = queryset.filter(
+                    service__name__icontains=service.strip()
+                )
+            return queryset
         return queryset
 
     def filter_is_open(self, queryset, name, value):

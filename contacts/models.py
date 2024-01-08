@@ -20,13 +20,11 @@ class ContactsModel(models.Model):
         max_length=20,
         blank=True,
         null=True,
-        unique=True,
     )
     website = models.URLField(
         verbose_name='Сайт',
         blank=True,
         null=True,
-        unique=True,
     )
 
     class Meta:
