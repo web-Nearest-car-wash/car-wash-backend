@@ -2,6 +2,7 @@ import datetime as dt
 
 from drf_spectacular.utils import extend_schema
 
+
 AROUND_THE_CLOCK = 'Круглосуточно'
 CLOSED = 'Закрыто'
 NO_INFORMATION = 'Нет информации'

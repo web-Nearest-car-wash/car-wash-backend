@@ -1,13 +1,14 @@
 import datetime as dt
 
 from django.db.models import Q
+from drf_recaptcha.fields import ReCaptchaV2Field
 from geopy.distance import geodesic
 from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
 
 from carwash.models import (CarWashImageModel, CarWashModel,
-                            CarWashServicesModel, CarWashTypeModel,
-                            MetroStationModel)
+                            CarWashRatingModel, CarWashServicesModel,
+                            CarWashTypeModel, MetroStationModel)
 from contacts.models import ContactsModel
 from core.constants import (AROUND_THE_CLOCK, CLOSED, NO_INFORMATION,
                             PAYMENT_CHOICES, TIME_UTC_CORRECTION, WORKS_UNTIL)
@@ -263,3 +264,17 @@ class CarWashSerializer(CarWashCardSerializer):
     # def get_services(obj):
     #     queryset = obj.carwashservicesmodel_set.all()
     #     return CarWashServicesSerializer(queryset, many=True).data
+
+
+class CarWashRatingSerializer(serializers.ModelSerializer):
+    captcha = ReCaptchaV2Field()
+
+    class Meta:
+        model = CarWashRatingModel
+        fields = ['score', 'captcha']
+
+    def create(self, validated_data):
+        return CarWashRatingModel.objects.create(**validated_data)
+
+    def update(self, instance, validated_data):
+        return instance
