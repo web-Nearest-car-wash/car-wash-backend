@@ -52,6 +52,24 @@ poetry install
 pre-commit install
 ```
 
+### Запуск postgre базы локально
+Если хочется установить локально postgre, а не sqlite базу:
+
+В  infra/dev папке
+Добавляем енв файл
+в infra/dev/.env
+
+DB_ENGINE=django.db.backends.postgresql
+POSTGRES_DB=carwash
+POSTGRES_USER=carwashadmin
+POSTGRES_PASSWORD=carwashadmin12345
+
+и в терминале:   docker compose up -d
+
+После этого базу можно наполнить:
+В терминале python manage.py load_data
+и load_images
+
 ## Документация
 
 Swagger [тут должна быть ссылка](https://example.ru/)
