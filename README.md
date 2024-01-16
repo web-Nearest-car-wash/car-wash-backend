@@ -59,10 +59,12 @@ pre-commit install
 Добавляем енв файл
 в infra/dev/.env
 
+```
 DB_ENGINE=django.db.backends.postgresql
 POSTGRES_DB=carwash
 POSTGRES_USER=carwashadmin
 POSTGRES_PASSWORD=carwashadmin12345
+```
 
 и в терминале:   docker compose up -d
 
