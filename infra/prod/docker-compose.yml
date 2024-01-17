@@ -3,6 +3,15 @@ version: '3.3'
 
 services:
 
+  frontend:
+    image: carwash2023/car-wash-frontend:latest
+    volumes:
+      - ./data/frontend/:/app/result_build/
+    depends_on:
+      - backend
+    env_file:
+      - ./.env
+
 # Backend-project
   backend:
     image: carwash2023/car-wash-backend:latest
@@ -41,3 +50,4 @@ services:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
       - ./data/static/:/var/html/static/
       - ./data/media/:/var/html/media/
+      - ./data/frontend/build:/usr/share/nginx/html/
