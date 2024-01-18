@@ -8,6 +8,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from drf_recaptcha.validators import ReCaptchaV2Validator
 from drf_spectacular.utils import extend_schema_view
 from rest_framework import filters, status
+from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.serializers import ValidationError
@@ -47,6 +48,7 @@ class CarWashViewSet(ReadOnlyModelViewSet):
         filters.SearchFilter
     )
     filterset_class = CarWashFilter
+    pagination_class = LimitOffsetPagination
     ordering_fields = ('rating', 'distance')
     search_fields = (
         'address',
