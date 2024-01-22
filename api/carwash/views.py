@@ -1,25 +1,26 @@
 from decimal import Decimal
-from math import cos, radians, sin
 
 from django.conf import settings
-from django.db.models import Avg, ExpressionWrapper, F, FloatField, Func
+from django.db.models import Avg, F
 from django.db.models.functions import Round
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import extend_schema_view
 from rest_framework import filters
+from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.permissions import AllowAny
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
-from carwash.models import CarWashModel, CarWashTypeModel
+from carwash.models import CarWashModel,  CarWashTypeModel
 from core.constants import (CARWASH_API_SCHEMA_EXTENSIONS,
                             CARWASH_TYPE_API_SCHEMA_EXTENSIONS,
-                            EARTH_AVERAGE_RADIUS,
                             KEYWORDS_SERVICES_API_SCHEMA_EXTENSIONS)
 from services.models import KeywordsServicesModel
 
 from .filters import CarWashFilter
-from .serializers import (CarWashCardSerializer, CarWashSerializer,
-                          CarWashTypeSerializer, KeywordsServicesSerializer)
+from .serializers import (CarWashCardSerializer,
+                          CarWashSerializer, CarWashTypeSerializer,
+                          KeywordsServicesSerializer)
+from api.carwash.utils import distance_calculation
 
 
 @extend_schema_view(**CARWASH_API_SCHEMA_EXTENSIONS)
@@ -50,43 +51,22 @@ class CarWashViewSet(ReadOnlyModelViewSet):
         'service__name',
         'type__name',
     )
+    pagination_class = LimitOffsetPagination
     permission_classes = [AllowAny]
     http_method_names = ['get']
 
     def get_queryset(self):
         """"Добавление в queryset поля расстояния
         до геопозиции для возможности сортировки"""
-        user_latitude = Decimal(
-            self.request.query_params.get(
-                'latitude', settings.DEFAULT_LATITUDE
+        user_latitude = self.request.query_params.get('latitude')
+        user_longitude = self.request.query_params.get('longitude')
+        if not (user_latitude and user_longitude):
+            return distance_calculation(
+                self.queryset,
+                Decimal(settings.DEFAULT_LATITUDE),
+                Decimal(settings.DEFAULT_LONGITUDE)
             )
-        )
-        user_longitude = Decimal(
-            self.request.query_params.get(
-                'longitude', settings.DEFAULT_LONGITUDE
-            )
-        )
-        return self.queryset.annotate(
-            distance=ExpressionWrapper(
-                EARTH_AVERAGE_RADIUS * Func(
-                    Func(
-                        Func(F('latitude'), function='RADIANS'),
-                        function='SIN'
-                    )*sin(
-                        radians(user_latitude)
-                    ) + Func(
-                        Func(F('latitude'), function='RADIANS'),
-                        function='COS'
-                    )*cos(radians(user_latitude))*Func(
-                        Func(
-                            F('longitude'), function='RADIANS'
-                        )-radians(user_longitude),
-                        function='COS'
-                    ), function='ACOS'
-                ),
-                output_field=FloatField()
-            ),
-        )
+        return self.queryset
 
     def get_serializer_class(self):
         """Возвращает соответствующий класс сериализатора в

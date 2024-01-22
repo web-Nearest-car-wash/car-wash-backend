@@ -1,7 +1,9 @@
 from django.urls import include, path
 from rest_framework.routers import SimpleRouter
 
-from .views import CarWashTypeViewSet, CarWashViewSet, KeywordsServicesViewSet
+from .views import (CarWashTypeViewSet,
+                    CarWashViewSet, KeywordsServicesViewSet)
+
 
 router = SimpleRouter()
 

@@ -6,8 +6,8 @@ from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
 
 from carwash.models import (CarWashImageModel, CarWashModel,
-                            CarWashServicesModel, CarWashTypeModel,
-                            MetroStationModel)
+                            CarWashServicesModel,
+                            CarWashTypeModel, MetroStationModel)
 from contacts.models import ContactsModel
 from core.constants import (AROUND_THE_CLOCK, CLOSED, NO_INFORMATION,
                             PAYMENT_CHOICES, TIME_UTC_CORRECTION, WORKS_UNTIL)

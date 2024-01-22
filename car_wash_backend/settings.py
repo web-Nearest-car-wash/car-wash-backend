@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'drf_recaptcha',
     'djoser',
     'django_filters',
     'drf_spectacular',
@@ -233,3 +234,5 @@ DEFAULT_LONGITUDE = os.getenv('DEFAULT_LONGITUDE', default='37.6174994')
 CARWASH_TYPES = os.getenv(
     'CARWASH_TYPES', default='самообслуживания,автоматическая,ручная'
 )
+
+DRF_RECAPTCHA_SECRET_KEY = '6LfrdFIpAAAAAHavnL0AViY8qDmayW06DrTSPJD5'
