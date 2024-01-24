@@ -5,8 +5,10 @@ from django.utils import timezone
 from api.carwash.serializers import (CarWashCardSerializer,
                                      CarWashContactsSerializer,
                                      CarWashScheduleSerializer,
-                                     CarWashSerializer)
+                                     CarWashSerializer,
+                                     KeywordsServicesSerializer)
 from carwash.models import CarWashImageModel, CarWashModel, CarWashTypeModel
+from services.models import KeywordsServicesModel
 from contacts.models import ContactsModel
 from schedule.models import ScheduleModel
 from core.constants import (AROUND_THE_CLOCK,
@@ -161,6 +163,25 @@ class TestCarWashScheduleSerializer(TestCarWashSerializer):
             'closing_time',
             'around_the_clock',
             'open_until_list',
+        )
+        self.assertEqual(self.serializer.Meta.fields, expected_fields)
+
+
+class TestKeywordsServicesSerializer(unittest.TestCase):
+
+    def setUp(self):
+        self.serializer = KeywordsServicesSerializer()
+        self.keywords_service = KeywordsServicesModel.objects.create(
+            name='Test Keyword Service',
+        )
+        self.keywords_service.save()
+
+    def tearDown(self):
+        self.keywords_service.delete()
+
+    def test_fields(self):
+        expected_fields = (
+            'name',
         )
         self.assertEqual(self.serializer.Meta.fields, expected_fields)
 
