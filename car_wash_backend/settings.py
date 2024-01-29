@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'drf_recaptcha',
     'djoser',
     'django_filters',
+    'drf_standardized_errors',
     'drf_spectacular',
     'corsheaders',
     'phonenumber_field',
@@ -92,12 +93,12 @@ WSGI_APPLICATION = 'car_wash_backend.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 # if DEBUG:
-# DATABASES = {
-#    'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
+#     DATABASES = {
+#         'default': {
+#             'ENGINE': 'django.db.backends.sqlite3',
+#             'NAME': BASE_DIR / 'db.sqlite3',
+#         }
 #     }
-# }
 # else:
 DATABASES = {
     "default": {
@@ -152,7 +153,9 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static-back')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
-    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    # 'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema', #default schema
+    'DEFAULT_SCHEMA_CLASS': 'drf_standardized_errors.openapi.AutoSchema',  # schema with swagger errors
+    'EXCEPTION_HANDLER': "drf_standardized_errors.handler.exception_handler",
     'DEFAULT_THROTTLE_CLASSES': [
         'rest_framework.throttling.UserRateThrottle',
         'rest_framework.throttling.AnonRateThrottle',
@@ -191,6 +194,8 @@ DJOSER = {
     },
 }
 
+DRF_STANDARDIZED_ERRORS = {"ENABLE_IN_DEBUG_FOR_UNHANDLED_EXCEPTIONS": True}
+
 SPECTACULAR_SETTINGS = {
     'TITLE': 'Car_wash_API',
     'DESCRIPTION': 'Car_wash_API Schema',
@@ -199,7 +204,21 @@ SPECTACULAR_SETTINGS = {
     'SWAGGER_UI_SETTINGS': {
         "filter": True,  # включить поиск по тегам
     },
-    'COMPONENT_SPLIT_REQUEST': True
+    'COMPONENT_SPLIT_REQUEST': True,
+    'ENUM_NAME_OVERRIDES': {
+        "ValidationErrorEnum": "drf_standardized_errors.openapi_serializers.ValidationErrorEnum.choices",
+        "ClientErrorEnum": "drf_standardized_errors.openapi_serializers.ClientErrorEnum.choices",
+        "ServerErrorEnum": "drf_standardized_errors.openapi_serializers.ServerErrorEnum.choices",
+        "ErrorCode401Enum": "drf_standardized_errors.openapi_serializers.ErrorCode401Enum.choices",
+        "ErrorCode403Enum": "drf_standardized_errors.openapi_serializers.ErrorCode403Enum.choices",
+        "ErrorCode404Enum": "drf_standardized_errors.openapi_serializers.ErrorCode404Enum.choices",
+        "ErrorCode405Enum": "drf_standardized_errors.openapi_serializers.ErrorCode405Enum.choices",
+        "ErrorCode406Enum": "drf_standardized_errors.openapi_serializers.ErrorCode406Enum.choices",
+        "ErrorCode415Enum": "drf_standardized_errors.openapi_serializers.ErrorCode415Enum.choices",
+        "ErrorCode429Enum": "drf_standardized_errors.openapi_serializers.ErrorCode429Enum.choices",
+        "ErrorCode500Enum": "drf_standardized_errors.openapi_serializers.ErrorCode500Enum.choices",
+    },
+    'POSTPROCESSING_HOOKS': ["drf_standardized_errors.openapi_hooks.postprocess_schema_enums"]
 }
 
 AUTH_USER_MODEL = 'users.User'
