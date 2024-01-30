@@ -72,7 +72,8 @@ class TestKeywordsServicesAPIViewSet(APITestCase):
         self.assertEqual(response.status_code, HTTPStatus.OK)
 
     def test_get_keywords_services_detail(self):
-        request = self.factory.get(f'/keywords_services/{self.keyword_service.id}/')
+        request = self.factory.get(
+            f'/keywords_services/{self.keyword_service.id}/')
         response = self.detail_view(request, pk=self.keyword_service.id)
         self.assertEqual(response.status_code, HTTPStatus.OK)
 
