@@ -27,8 +27,6 @@ drf-recaptcha = "^3.0.0"
 drf-standardized-errors = "^0.12.6"
 
 
-
-
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
