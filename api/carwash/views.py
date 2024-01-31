@@ -160,13 +160,11 @@ class CarWashRatingViewSet(ModelViewSet):
                     {'success': 'Rating created successfully!'},
                     status=status.HTTP_201_CREATED
                 )
-            else:
-                return Response(
-                    {'error': 'reCAPTCHA response is missing'},
-                    status=status.HTTP_400_BAD_REQUEST
-                )
-        else:
             return Response(
-                serializer.errors,
+                {'error': 'reCAPTCHA response is missing'},
                 status=status.HTTP_400_BAD_REQUEST
             )
+        return Response(
+            serializer.errors,
+            status=status.HTTP_400_BAD_REQUEST
+        )
