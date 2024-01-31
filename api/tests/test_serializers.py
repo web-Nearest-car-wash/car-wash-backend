@@ -8,14 +8,11 @@ from api.carwash.serializers import (CarWashCardSerializer,
                                      CarWashSerializer,
                                      KeywordsServicesSerializer)
 from carwash.models import CarWashImageModel, CarWashModel, CarWashTypeModel
-from services.models import KeywordsServicesModel
 from contacts.models import ContactsModel
+from core.constants import (AROUND_THE_CLOCK, CLOSED, NO_INFORMATION,
+                            WORKS_UNTIL)
 from schedule.models import ScheduleModel
-from core.constants import (AROUND_THE_CLOCK,
-                            CLOSED,
-                            NO_INFORMATION,
-                            WORKS_UNTIL
-                            )
+from services.models import KeywordsServicesModel
 
 
 class TestCarWashSerializer(unittest.TestCase):

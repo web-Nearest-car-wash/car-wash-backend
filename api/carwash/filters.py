@@ -6,9 +6,9 @@ from django.db.models import Q
 from django_filters.rest_framework import (BooleanFilter, CharFilter,
                                            FilterSet, NumberFilter)
 
+from api.carwash.utils import distance_calculation
 from carwash.models import CarWashModel
 from schedule.models import ScheduleModel
-from api.carwash.utils import distance_calculation
 
 
 class CarWashFilter(FilterSet):

@@ -6,7 +6,6 @@ from django.db.models.functions import Round
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_recaptcha.validators import ReCaptchaV2Validator
 from drf_spectacular.utils import extend_schema_view
-
 from rest_framework import filters, status
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.permissions import AllowAny
@@ -14,6 +13,7 @@ from rest_framework.response import Response
 from rest_framework.serializers import ValidationError
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 
+from api.carwash.utils import distance_calculation
 from carwash.models import CarWashModel, CarWashRatingModel, CarWashTypeModel
 from core.constants import (CARWASH_API_SCHEMA_EXTENSIONS,
                             CARWASH_TYPE_API_SCHEMA_EXTENSIONS,
@@ -24,7 +24,6 @@ from .filters import CarWashFilter
 from .serializers import (CarWashCardSerializer, CarWashRatingSerializer,
                           CarWashSerializer, CarWashTypeSerializer,
                           KeywordsServicesSerializer)
-from api.carwash.utils import distance_calculation
 
 
 @extend_schema_view(**CARWASH_API_SCHEMA_EXTENSIONS)
