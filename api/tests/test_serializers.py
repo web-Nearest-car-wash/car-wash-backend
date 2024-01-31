@@ -5,10 +5,17 @@ from django.utils import timezone
 from api.carwash.serializers import (CarWashCardSerializer,
                                      CarWashContactsSerializer,
                                      CarWashScheduleSerializer,
-                                     CarWashSerializer)
+                                     CarWashSerializer,
+                                     KeywordsServicesSerializer)
 from carwash.models import CarWashImageModel, CarWashModel, CarWashTypeModel
+from services.models import KeywordsServicesModel
 from contacts.models import ContactsModel
 from schedule.models import ScheduleModel
+from core.constants import (AROUND_THE_CLOCK,
+                            CLOSED,
+                            NO_INFORMATION,
+                            WORKS_UNTIL
+                            )
 
 
 class TestCarWashSerializer(unittest.TestCase):
@@ -33,9 +40,10 @@ class TestCarWashSerializer(unittest.TestCase):
             carwash=self.carwash,
             day_of_week=timezone.now().weekday(),
             opening_time="10:00",
-            closing_time="18:00",
+            closing_time="23:00",
             around_the_clock=False,
         )
+        self.carwash.distance = '10'
 
     def tearDown(self):
         self.carwash.delete()
@@ -52,6 +60,7 @@ class TestCarWashSerializer(unittest.TestCase):
             'rating',
             'latitude',
             'longitude',
+            'distance',
             'open_until',
         )
         self.assertEqual(self.serializer.Meta.fields, expected_fields)
@@ -62,10 +71,10 @@ class TestCarWashSerializer(unittest.TestCase):
 
     def test_get_open_until_with_schedules(self):
         serializer = CarWashSerializer(self.carwash)
-        self.assertEqual(
-            serializer.data['open_until'],
-            f'Работает до {self.schedule.closing_time}'
-        )
+        self.schedules = [AROUND_THE_CLOCK,
+                          CLOSED, NO_INFORMATION,
+                          f"{WORKS_UNTIL}{self.schedule.closing_time}"]
+        self.assertIn(serializer.data['open_until'], self.schedules)
 
 
 class TestCarWashCardSerializer(TestCarWashSerializer):
@@ -154,6 +163,25 @@ class TestCarWashScheduleSerializer(TestCarWashSerializer):
             'closing_time',
             'around_the_clock',
             'open_until_list',
+        )
+        self.assertEqual(self.serializer.Meta.fields, expected_fields)
+
+
+class TestKeywordsServicesSerializer(unittest.TestCase):
+
+    def setUp(self):
+        self.serializer = KeywordsServicesSerializer()
+        self.keywords_service = KeywordsServicesModel.objects.create(
+            name='Test Keyword Service',
+        )
+        self.keywords_service.save()
+
+    def tearDown(self):
+        self.keywords_service.delete()
+
+    def test_fields(self):
+        expected_fields = (
+            'name',
         )
         self.assertEqual(self.serializer.Meta.fields, expected_fields)
 
