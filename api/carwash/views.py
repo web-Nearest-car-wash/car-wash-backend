@@ -16,6 +16,7 @@ from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 from api.carwash.utils import distance_calculation
 from carwash.models import CarWashModel, CarWashRatingModel, CarWashTypeModel
 from core.constants import (CARWASH_API_SCHEMA_EXTENSIONS,
+                            CARWASH_RATING_API_SCHEMA_EXTENSIONS,
                             CARWASH_TYPE_API_SCHEMA_EXTENSIONS,
                             KEYWORDS_SERVICES_API_SCHEMA_EXTENSIONS)
 from services.models import KeywordsServicesModel
@@ -109,13 +110,12 @@ class CarWashTypeViewSet(ReadOnlyModelViewSet):
         )
 
 
-RECAPTCHA_SECRET_KEY = '6LfrdFIpAAAAAHavnL0AViY8qDmayW06DrTSPJD5'
-
-
+@extend_schema_view(**CARWASH_RATING_API_SCHEMA_EXTENSIONS)
 class CarWashRatingViewSet(ModelViewSet):
     queryset = CarWashRatingModel.objects.all()
     serializer_class = CarWashRatingSerializer
     permission_classes = [AllowAny]
+    http_method_names = ['post']
 
     def create(self, request, *args, **kwargs):
         serializer = self.serializer_class(
@@ -125,21 +125,21 @@ class CarWashRatingViewSet(ModelViewSet):
             recaptcha_response = request.data.get('captcha', None)
             if recaptcha_response:
                 validator = ReCaptchaV2Validator(
-                    secret_key=RECAPTCHA_SECRET_KEY
+                    secret_key=settings.DRF_RECAPTCHA_SECRET_KEY
                 )
                 try:
                     validator(recaptcha_response, None)
-                except ValidationError as e:
+                except ValidationError as error:
                     return Response(
-                        {'error': str(e)},
+                        {'error': str(error)},
                         status=status.HTTP_400_BAD_REQUEST
                     )
                 return Response(
-                    {'success': 'Rating created successfully!'},
+                    {'success': 'Оценка успешно добавлена!'},
                     status=status.HTTP_201_CREATED
                 )
             return Response(
-                {'error': 'reCAPTCHA response is missing'},
+                {'error': 'Отсутствует ответ reCAPTCHA'},
                 status=status.HTTP_400_BAD_REQUEST
             )
         return Response(
