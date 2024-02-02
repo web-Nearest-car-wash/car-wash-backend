@@ -235,4 +235,7 @@ CARWASH_TYPES = os.getenv(
     'CARWASH_TYPES', default='самообслуживания,автоматическая,ручная'
 )
 
-DRF_RECAPTCHA_SECRET_KEY = '6LfrdFIpAAAAAHavnL0AViY8qDmayW06DrTSPJD5'
+DRF_RECAPTCHA_SECRET_KEY = os.getenv(
+    'RECAPTCHA_SECRET_KEY',
+    default='6LcMZFIpAAAAALU1oh_TGiinQFwvsSRliytTfasU'
+)
