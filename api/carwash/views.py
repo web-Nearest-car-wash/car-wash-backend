@@ -84,6 +84,7 @@ class KeywordsServicesViewSet(ReadOnlyModelViewSet):
     """
     queryset = KeywordsServicesModel.objects.all()
     serializer_class = KeywordsServicesSerializer
+    pagination_class = LimitOffsetPagination
     permission_classes = [AllowAny]
     http_method_names = ['get']
 
@@ -96,6 +97,7 @@ class CarWashTypeViewSet(ReadOnlyModelViewSet):
     """
     queryset = CarWashTypeModel.objects.all()
     serializer_class = CarWashTypeSerializer
+    pagination_class = LimitOffsetPagination
     permission_classes = [AllowAny]
     http_method_names = ['get']
 
