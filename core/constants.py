@@ -2,7 +2,6 @@ import datetime as dt
 
 from drf_spectacular.utils import extend_schema
 
-
 AROUND_THE_CLOCK = 'Круглосуточно'
 CLOSED = 'Закрыто'
 NO_INFORMATION = 'Нет информации'
@@ -78,6 +77,13 @@ CARWASH_TYPE_API_SCHEMA_EXTENSIONS = {
     'retrieve': extend_schema(
         tags=['Types'],
         summary='Получить тип автомойки',
+    )
+}
+
+CARWASH_RATING_API_SCHEMA_EXTENSIONS = {
+    'create': extend_schema(
+        tags=['Rating'],
+        summary="Добавить оценку автомойки",
     )
 }
 

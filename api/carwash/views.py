@@ -4,23 +4,27 @@ from django.conf import settings
 from django.db.models import Avg, F
 from django.db.models.functions import Round
 from django_filters.rest_framework import DjangoFilterBackend
+from drf_recaptcha.validators import ReCaptchaV2Validator
 from drf_spectacular.utils import extend_schema_view
-from rest_framework import filters
+from rest_framework import filters, status
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.permissions import AllowAny
-from rest_framework.viewsets import ReadOnlyModelViewSet
+from rest_framework.response import Response
+from rest_framework.serializers import ValidationError
+from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 
-from carwash.models import CarWashModel,  CarWashTypeModel
+from api.carwash.utils import distance_calculation
+from carwash.models import CarWashModel, CarWashRatingModel, CarWashTypeModel
 from core.constants import (CARWASH_API_SCHEMA_EXTENSIONS,
+                            CARWASH_RATING_API_SCHEMA_EXTENSIONS,
                             CARWASH_TYPE_API_SCHEMA_EXTENSIONS,
                             KEYWORDS_SERVICES_API_SCHEMA_EXTENSIONS)
 from services.models import KeywordsServicesModel
 
 from .filters import CarWashFilter
-from .serializers import (CarWashCardSerializer,
+from .serializers import (CarWashCardSerializer, CarWashRatingSerializer,
                           CarWashSerializer, CarWashTypeSerializer,
                           KeywordsServicesSerializer)
-from api.carwash.utils import distance_calculation
 
 
 @extend_schema_view(**CARWASH_API_SCHEMA_EXTENSIONS)
@@ -44,6 +48,7 @@ class CarWashViewSet(ReadOnlyModelViewSet):
         filters.SearchFilter
     )
     filterset_class = CarWashFilter
+    pagination_class = LimitOffsetPagination
     ordering_fields = ('rating', 'distance')
     search_fields = (
         'address',
@@ -104,4 +109,42 @@ class CarWashTypeViewSet(ReadOnlyModelViewSet):
     def get_queryset(self):
         return self.queryset.filter(
             name__in=settings.CARWASH_TYPES.split(',')
+        )
+
+
+@extend_schema_view(**CARWASH_RATING_API_SCHEMA_EXTENSIONS)
+class CarWashRatingViewSet(ModelViewSet):
+    queryset = CarWashRatingModel.objects.all()
+    serializer_class = CarWashRatingSerializer
+    permission_classes = [AllowAny]
+    http_method_names = ['post']
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.serializer_class(
+            data=request.data, context={'request': request}
+        )
+        if serializer.is_valid():
+            recaptcha_response = request.data.get('captcha', None)
+            if recaptcha_response:
+                validator = ReCaptchaV2Validator(
+                    secret_key=settings.DRF_RECAPTCHA_SECRET_KEY
+                )
+                try:
+                    validator(recaptcha_response, None)
+                except ValidationError as error:
+                    return Response(
+                        {'error': str(error)},
+                        status=status.HTTP_400_BAD_REQUEST
+                    )
+                return Response(
+                    {'success': 'Оценка успешно добавлена!'},
+                    status=status.HTTP_201_CREATED
+                )
+            return Response(
+                {'error': 'Отсутствует ответ reCAPTCHA'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        return Response(
+            serializer.errors,
+            status=status.HTTP_400_BAD_REQUEST
         )

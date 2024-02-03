@@ -1,6 +1,7 @@
 from math import cos, radians, sin
 
 from django.db.models import ExpressionWrapper, F, FloatField, Func
+
 from core.constants import EARTH_AVERAGE_RADIUS
 
 
