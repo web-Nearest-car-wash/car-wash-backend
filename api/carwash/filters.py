@@ -65,7 +65,7 @@ class CarWashFilter(FilterSet):
             )
         return distance_calculation(
                 self.queryset, Decimal(latitude), Decimal(longitude)
-        ).order_by('distance')
+        )
 
     def filter_services(self, queryset, name, value):
         """Фильтрация по услугам"""
