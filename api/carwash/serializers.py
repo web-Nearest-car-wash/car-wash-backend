@@ -268,13 +268,22 @@ class CarWashSerializer(CarWashCardSerializer):
 
 class CarWashRatingSerializer(serializers.ModelSerializer):
     captcha = ReCaptchaV2Field()
+    carwash_id = serializers.IntegerField()
 
     class Meta:
         model = CarWashRatingModel
-        fields = ['score', 'captcha']
+        fields = ['score', 'carwash_id', 'captcha']
+
+    def validate_carwash_id(self, value):
+        if not CarWashModel.objects.filter(id=value).exists():
+            raise serializers.ValidationError(
+                "Мойки с указанным ID не существует."
+            )
+        return value
 
     def create(self, validated_data):
-        return CarWashRatingModel.objects.create(**validated_data)
-
-    def update(self, instance, validated_data):
-        return instance
+        carwash_id = validated_data.pop('carwash_id')
+        carwash = CarWashModel.objects.get(id=carwash_id)
+        return CarWashRatingModel.objects.create(
+            carwash=carwash, **validated_data
+        )
