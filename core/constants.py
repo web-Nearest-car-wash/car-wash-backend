@@ -62,6 +62,10 @@ KEYWORDS_SERVICES_API_SCHEMA_EXTENSIONS = {
     'list': extend_schema(
         tags=['Services'],
         summary="Получить ключевые слова для фильтрации по услугам"
+    ),
+    'retrieve': extend_schema(
+        tags=['Services'],
+        summary='Получить ключевое слово для фильтрации по услуге'
     )
 }
 
@@ -69,6 +73,17 @@ CARWASH_TYPE_API_SCHEMA_EXTENSIONS = {
     'list': extend_schema(
         tags=['Types'],
         summary="Получить типы автомоек",
+    ),
+    'retrieve': extend_schema(
+        tags=['Types'],
+        summary='Получить тип автомойки',
+    )
+}
+
+CARWASH_RATING_API_SCHEMA_EXTENSIONS = {
+    'create': extend_schema(
+        tags=['Rating'],
+        summary="Добавить оценку автомойки",
     )
 }
 
