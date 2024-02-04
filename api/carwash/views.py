@@ -48,7 +48,6 @@ class CarWashViewSet(ReadOnlyModelViewSet):
         filters.SearchFilter
     )
     filterset_class = CarWashFilter
-    pagination_class = LimitOffsetPagination
     ordering_fields = ('rating', 'distance')
     search_fields = (
         'address',
@@ -58,7 +57,6 @@ class CarWashViewSet(ReadOnlyModelViewSet):
     )
     pagination_class = LimitOffsetPagination
     permission_classes = [AllowAny]
-    pagination_class = LimitOffsetPagination
     http_method_names = ['get']
 
     def get_queryset(self):
