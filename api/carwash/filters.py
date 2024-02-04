@@ -54,8 +54,8 @@ class CarWashFilter(FilterSet):
 
     def filter_by_distance(self, queryset, name, value):
         """Фильтрация по местоположени """
-        latitude = self.data.get('latitude')
-        longitude = self.data.get('longitude')
+        latitude = self.data.get('latitude', settings.DEFAULT_LATITUDE)
+        longitude = self.data.get('longitude', settings.DEFAULT_LONGITUDE)
         if latitude and longitude:
             return queryset.filter(
                 Q(latitude__range=(
@@ -71,10 +71,10 @@ class CarWashFilter(FilterSet):
         """Фильтрация по услугам"""
         if value:
             services_list = value.split(',')
+            q = Q()
             for service in services_list:
-                queryset = queryset.filter(
-                    service__name__icontains=service.strip()
-                )
+                q |= Q(service__name__icontains=service.strip())
+                queryset = queryset.filter(q)
             return queryset
         return queryset
 
