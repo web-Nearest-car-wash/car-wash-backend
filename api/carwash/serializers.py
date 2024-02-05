@@ -104,6 +104,8 @@ class CarWashScheduleSerializer(ModelSerializer):
             if today_schedule.around_the_clock:
                 return AROUND_THE_CLOCK
             if today_schedule.opening_time and today_schedule.closing_time:
+                if today_schedule.opening_time == today_schedule.closing_time:
+                    return AROUND_THE_CLOCK
                 if current_time.time() < today_schedule.closing_time:
                     return (f'{WORKS_UNTIL}'
                             f'{today_schedule.closing_time.strftime("%H:%M")}')
