@@ -256,5 +256,5 @@ CARWASH_TYPES = os.getenv(
 
 DRF_RECAPTCHA_SECRET_KEY = os.getenv(
     'RECAPTCHA_SECRET_KEY',
-    default='6LcMZFIpAAAAALU1oh_TGiinQFwvsSRliytTfasU'
+    default='6LcfOWUpAAAAAEO7KiPX7BrCw1ZYO75SVExZE3PF'
 )
