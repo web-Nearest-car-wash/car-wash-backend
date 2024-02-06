@@ -74,7 +74,7 @@ class CarWashFilter(FilterSet):
             q = Q()
             for service in services_list:
                 q |= Q(service__name__icontains=service.strip())
-                queryset = queryset.filter(q)
+            queryset = queryset.filter(q)
             return queryset
         return queryset
 
