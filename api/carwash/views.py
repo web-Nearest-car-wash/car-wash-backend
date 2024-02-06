@@ -120,7 +120,9 @@ class CarWashRatingViewSet(ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         serializer = self.serializer_class(
-            data=request.data, context={'request': request}
+            data=request.data, context={
+                'request': request, 'format': self.format_kwarg, 'view': self
+            }
         )
         if serializer.is_valid():
             recaptcha_response = request.data.get('captcha', None)
