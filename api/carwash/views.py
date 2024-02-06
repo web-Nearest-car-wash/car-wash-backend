@@ -4,13 +4,11 @@ from django.conf import settings
 from django.db.models import Avg, F
 from django.db.models.functions import Round
 from django_filters.rest_framework import DjangoFilterBackend
-# from drf_recaptcha.validators import ReCaptchaV2Validator
 from drf_spectacular.utils import extend_schema_view
 from rest_framework import filters, status
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
-# from rest_framework.serializers import ValidationError
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 
 from api.carwash.utils import distance_calculation
@@ -123,30 +121,11 @@ class CarWashRatingViewSet(ModelViewSet):
             data=request.data, context={'request': request}
         )
         if serializer.is_valid():
-            # recaptcha_response = request.data.get('captcha', None)
-            # if recaptcha_response:
-            #    validator = ReCaptchaV2Validator(
-            #        secret_key=settings.DRF_RECAPTCHA_SECRET_KEY
-            #    )
-            # try:
+            serializer.save()
             return Response(
                     {'success': 'Оценка успешно добавлена!'},
                     status=status.HTTP_201_CREATED
                 )
-            #        validator(recaptcha_response, None)
-            # except ValidationError as error:
-            #        return Response(
-            #            {'error': str(error)},
-            #            status=status.HTTP_400_BAD_REQUEST
-            #        )
-            # return Response(
-            #    {'success': 'Оценка успешно добавлена!'},
-            #    status=status.HTTP_201_CREATED
-            # )
-            # return Response(
-            #    {'error': 'Отсутствует ответ reCAPTCHA'},
-            #    status=status.HTTP_400_BAD_REQUEST
-            # )
         return Response(
             serializer.errors,
             status=status.HTTP_400_BAD_REQUEST
