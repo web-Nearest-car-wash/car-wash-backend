@@ -44,8 +44,7 @@ class CarWashFilter(FilterSet):
     )
 
     type = CharFilter(
-        field_name='type__name',
-        lookup_expr='istartswith',
+        method='filter_types',
         label='Тип автомойки'
     )
 
@@ -74,6 +73,17 @@ class CarWashFilter(FilterSet):
             q = Q()
             for service in services_list:
                 q |= Q(service__name__icontains=service.strip())
+            queryset = queryset.filter(q)
+            return queryset
+        return queryset
+
+    def filter_types(self, queryset, name, value):
+        """Фильтрация по типам автомоек"""
+        if value:
+            types_list = value.split(',')
+            q = Q()
+            for type in types_list:
+                q |= Q(type__name__icontains=type.strip())
             queryset = queryset.filter(q)
             return queryset
         return queryset
