@@ -123,7 +123,7 @@ class CarWashRatingViewSet(ModelViewSet):
             }
         )
         if serializer.is_valid():
-            serializer.save()
+        # serializer.save()
             return Response(
                     {'success': 'Оценка успешно добавлена!'},
                     status=status.HTTP_201_CREATED
