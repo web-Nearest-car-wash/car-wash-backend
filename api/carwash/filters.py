@@ -2,7 +2,7 @@ from datetime import datetime
 from decimal import Decimal
 
 from django.conf import settings
-from django.db.models import Q
+from django.db.models import F, Q
 from django_filters.rest_framework import (BooleanFilter, CharFilter,
                                            FilterSet, NumberFilter)
 
@@ -99,7 +99,7 @@ class CarWashFilter(FilterSet):
         day_of_week = datetime.now().weekday()
         around_the_clock_carwashes = ScheduleModel.objects.filter(
             day_of_week=day_of_week,
-            around_the_clock=True
+            opening_time=F('closing_time')
         ).values_list('carwash')
         if value:
             return queryset.filter(id__in=around_the_clock_carwashes)
