@@ -1,25 +1,30 @@
 from decimal import Decimal
-from math import cos, radians, sin
 
 from django.conf import settings
-from django.db.models import Avg, ExpressionWrapper, F, FloatField, Func
+from django.db.models import Avg, F
 from django.db.models.functions import Round
 from django_filters.rest_framework import DjangoFilterBackend
+from drf_recaptcha.validators import ReCaptchaV2Validator
 from drf_spectacular.utils import extend_schema_view
-from rest_framework import filters
+from rest_framework import filters, status
+from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.permissions import AllowAny
-from rest_framework.viewsets import ReadOnlyModelViewSet
+from rest_framework.response import Response
+from rest_framework.serializers import ValidationError
+from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 
-from carwash.models import CarWashModel, CarWashTypeModel
+from api.carwash.utils import distance_calculation
+from carwash.models import CarWashModel, CarWashRatingModel, CarWashTypeModel
 from core.constants import (CARWASH_API_SCHEMA_EXTENSIONS,
+                            CARWASH_RATING_API_SCHEMA_EXTENSIONS,
                             CARWASH_TYPE_API_SCHEMA_EXTENSIONS,
-                            EARTH_AVERAGE_RADIUS,
                             KEYWORDS_SERVICES_API_SCHEMA_EXTENSIONS)
 from services.models import KeywordsServicesModel
 
 from .filters import CarWashFilter
-from .serializers import (CarWashCardSerializer, CarWashSerializer,
-                          CarWashTypeSerializer, KeywordsServicesSerializer)
+from .serializers import (CarWashCardSerializer, CarWashRatingSerializer,
+                          CarWashSerializer, CarWashTypeSerializer,
+                          KeywordsServicesSerializer)
 
 
 @extend_schema_view(**CARWASH_API_SCHEMA_EXTENSIONS)
@@ -50,43 +55,22 @@ class CarWashViewSet(ReadOnlyModelViewSet):
         'service__name',
         'type__name',
     )
+    pagination_class = LimitOffsetPagination
     permission_classes = [AllowAny]
     http_method_names = ['get']
 
     def get_queryset(self):
         """"Добавление в queryset поля расстояния
         до геопозиции для возможности сортировки"""
-        user_latitude = Decimal(
-            self.request.query_params.get(
-                'latitude', settings.DEFAULT_LATITUDE
+        user_latitude = self.request.query_params.get('latitude')
+        user_longitude = self.request.query_params.get('longitude')
+        if not (user_latitude and user_longitude):
+            return distance_calculation(
+                self.queryset,
+                Decimal(settings.DEFAULT_LATITUDE),
+                Decimal(settings.DEFAULT_LONGITUDE)
             )
-        )
-        user_longitude = Decimal(
-            self.request.query_params.get(
-                'longitude', settings.DEFAULT_LONGITUDE
-            )
-        )
-        return self.queryset.annotate(
-            distance=ExpressionWrapper(
-                EARTH_AVERAGE_RADIUS * Func(
-                    Func(
-                        Func(F('latitude'), function='RADIANS'),
-                        function='SIN'
-                    )*sin(
-                        radians(user_latitude)
-                    ) + Func(
-                        Func(F('latitude'), function='RADIANS'),
-                        function='COS'
-                    )*cos(radians(user_latitude))*Func(
-                        Func(
-                            F('longitude'), function='RADIANS'
-                        )-radians(user_longitude),
-                        function='COS'
-                    ), function='ACOS'
-                ),
-                output_field=FloatField()
-            ),
-        )
+        return self.queryset
 
     def get_serializer_class(self):
         """Возвращает соответствующий класс сериализатора в
@@ -104,6 +88,7 @@ class KeywordsServicesViewSet(ReadOnlyModelViewSet):
     """
     queryset = KeywordsServicesModel.objects.all()
     serializer_class = KeywordsServicesSerializer
+    pagination_class = LimitOffsetPagination
     permission_classes = [AllowAny]
     http_method_names = ['get']
 
@@ -116,10 +101,49 @@ class CarWashTypeViewSet(ReadOnlyModelViewSet):
     """
     queryset = CarWashTypeModel.objects.all()
     serializer_class = CarWashTypeSerializer
+    pagination_class = LimitOffsetPagination
     permission_classes = [AllowAny]
     http_method_names = ['get']
 
     def get_queryset(self):
         return self.queryset.filter(
             name__in=settings.CARWASH_TYPES.split(',')
+        )
+
+
+@extend_schema_view(**CARWASH_RATING_API_SCHEMA_EXTENSIONS)
+class CarWashRatingViewSet(ModelViewSet):
+    queryset = CarWashRatingModel.objects.all()
+    serializer_class = CarWashRatingSerializer
+    permission_classes = [AllowAny]
+    http_method_names = ['post']
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.serializer_class(
+            data=request.data, context={'request': request}
+        )
+        if serializer.is_valid():
+            recaptcha_response = request.data.get('captcha', None)
+            if recaptcha_response:
+                validator = ReCaptchaV2Validator(
+                    secret_key=settings.DRF_RECAPTCHA_SECRET_KEY
+                )
+                try:
+                    validator(recaptcha_response, None)
+                except ValidationError as error:
+                    return Response(
+                        {'error': str(error)},
+                        status=status.HTTP_400_BAD_REQUEST
+                    )
+                return Response(
+                    {'success': 'Оценка успешно добавлена!'},
+                    status=status.HTTP_201_CREATED
+                )
+            return Response(
+                {'error': 'Отсутствует ответ reCAPTCHA'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        return Response(
+            serializer.errors,
+            status=status.HTTP_400_BAD_REQUEST
         )

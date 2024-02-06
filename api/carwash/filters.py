@@ -6,6 +6,7 @@ from django.db.models import Q
 from django_filters.rest_framework import (BooleanFilter, CharFilter,
                                            FilterSet, NumberFilter)
 
+from api.carwash.utils import distance_calculation
 from carwash.models import CarWashModel
 from schedule.models import ScheduleModel
 
@@ -56,25 +57,24 @@ class CarWashFilter(FilterSet):
         """Фильтрация по местоположени """
         latitude = self.data.get('latitude')
         longitude = self.data.get('longitude')
-        if latitude and longitude:
-            return queryset.filter(
-                Q(latitude__range=(
-                    Decimal(latitude) - Decimal(settings.LAT_RANGE),
-                  Decimal(latitude) + Decimal(settings.LAT_RANGE))) &
-                Q(longitude__range=(
-                    Decimal(longitude) - Decimal(settings.LONG_RANGE),
-                  Decimal(longitude) + Decimal(settings.LONG_RANGE)))
+        if not (latitude and longitude):
+            return distance_calculation(
+                self.queryset,
+                Decimal(settings.DEFAULT_LATITUDE),
+                Decimal(settings.DEFAULT_LONGITUDE)
             )
-        return queryset
+        return distance_calculation(
+                self.queryset, Decimal(latitude), Decimal(longitude)
+        )
 
     def filter_services(self, queryset, name, value):
         """Фильтрация по услугам"""
         if value:
             services_list = value.split(',')
+            q = Q()
             for service in services_list:
-                queryset = queryset.filter(
-                    service__name__icontains=service.strip()
-                )
+                q |= Q(service__name__icontains=service.strip())
+            queryset = queryset.filter(q)
             return queryset
         return queryset
 
