@@ -104,6 +104,8 @@ class CarWashScheduleSerializer(ModelSerializer):
             if today_schedule.around_the_clock:
                 return AROUND_THE_CLOCK
             if today_schedule.opening_time and today_schedule.closing_time:
+                if today_schedule.opening_time == today_schedule.closing_time:
+                    return AROUND_THE_CLOCK
                 if current_time.time() < today_schedule.closing_time:
                     return (f'{WORKS_UNTIL}'
                             f'{today_schedule.closing_time.strftime("%H:%M")}')
@@ -268,13 +270,22 @@ class CarWashSerializer(CarWashCardSerializer):
 
 class CarWashRatingSerializer(serializers.ModelSerializer):
     captcha = ReCaptchaV2Field()
+    carwash_id = serializers.IntegerField()
 
     class Meta:
         model = CarWashRatingModel
-        fields = ['score', 'captcha']
+        fields = ['score', 'carwash_id', 'captcha']
+
+    def validate_carwash_id(self, value):
+        if not CarWashModel.objects.filter(id=value).exists():
+            raise serializers.ValidationError(
+                "Мойки с указанным ID не существует."
+            )
+        return value
 
     def create(self, validated_data):
-        return CarWashRatingModel.objects.create(**validated_data)
-
-    def update(self, instance, validated_data):
-        return instance
+        carwash_id = validated_data.pop('carwash_id')
+        carwash = CarWashModel.objects.get(id=carwash_id)
+        return CarWashRatingModel.objects.create(
+            carwash=carwash, **validated_data
+        )

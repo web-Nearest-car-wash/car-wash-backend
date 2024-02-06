@@ -80,4 +80,11 @@ CARWASH_TYPE_API_SCHEMA_EXTENSIONS = {
     )
 }
 
+CARWASH_RATING_API_SCHEMA_EXTENSIONS = {
+    'create': extend_schema(
+        tags=['Rating'],
+        summary="Добавить оценку автомойки",
+    )
+}
+
 EARTH_AVERAGE_RADIUS = 6371

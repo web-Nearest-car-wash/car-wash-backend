@@ -171,7 +171,7 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 5
+    'PAGE_SIZE': 10
 }
 
 SIMPLE_JWT = {
@@ -254,4 +254,7 @@ CARWASH_TYPES = os.getenv(
     'CARWASH_TYPES', default='самообслуживания,автоматическая,ручная'
 )
 
-DRF_RECAPTCHA_SECRET_KEY = '6LfrdFIpAAAAAHavnL0AViY8qDmayW06DrTSPJD5'
+DRF_RECAPTCHA_SECRET_KEY = os.getenv(
+    'RECAPTCHA_SECRET_KEY',
+    default='6LcfOWUpAAAAAEO7KiPX7BrCw1ZYO75SVExZE3PF'
+)

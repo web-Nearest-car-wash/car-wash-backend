@@ -65,16 +65,16 @@ class CarWashFilter(FilterSet):
             )
         return distance_calculation(
                 self.queryset, Decimal(latitude), Decimal(longitude)
-        ).order_by('distance')
+        )
 
     def filter_services(self, queryset, name, value):
         """Фильтрация по услугам"""
         if value:
             services_list = value.split(',')
+            q = Q()
             for service in services_list:
-                queryset = queryset.filter(
-                    service__name__icontains=service.strip()
-                )
+                q |= Q(service__name__icontains=service.strip())
+                queryset = queryset.filter(q)
             return queryset
         return queryset
 
