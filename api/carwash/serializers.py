@@ -285,7 +285,9 @@ class CarWashRatingSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         carwash_id = validated_data.pop('carwash_id')
+        score = validated_data.pop('score')
+        validated_data.pop('captcha')
         carwash = CarWashModel.objects.get(id=carwash_id)
         return CarWashRatingModel.objects.create(
-            carwash=carwash, **validated_data
+            carwash=carwash, score=score
         )
