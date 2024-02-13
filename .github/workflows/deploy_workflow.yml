@@ -77,5 +77,6 @@ jobs:
             echo DJANGO_SUPERUSER_USERNAME=${{ secrets.DJANGO_SUPERUSER_USERNAME }} >> .env
             echo REACT_APP_API_KEY=${{ secrets.REACT_APP_API_KEY }} >> .env
             echo REACT_APP_BASE_URL=${{ secrets.REACT_APP_BASE_URL }} >> .env
+            echo DEBUG=${{ secrets.DEBUG }} >> .env
             docker compose up -d --build
             sudo docker image prune --force
