@@ -233,7 +233,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # ]
 CORS_ORIGIN_ALLOW_ALL = True
 
-CSRF_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = False
 CSRF_TRUSTED_ORIGINS = [
     'http://localhost:3000',
     'https://*.*',
